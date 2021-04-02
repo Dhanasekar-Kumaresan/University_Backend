@@ -1,0 +1,21 @@
+GET http://localhost:3000/Subject
+
+
+###
+POST http://localhost:3000/Subject/NewSubject
+Content-Type: application/json
+
+{
+    "_id":
+    {
+            "Subject_ID":"15I005",
+            "Department_ID":"00IT"
+
+    },
+"Subject_ID":"15I005",
+"Subject_Name":"Data Science and Analysis",
+"isActive":"true",
+"Type":"OE",
+"Department_ID":"00IT"
+
+} 

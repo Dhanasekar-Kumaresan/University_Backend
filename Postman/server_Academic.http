@@ -1,0 +1,20 @@
+GET http://localhost:3000/Academic
+
+###
+POST http://localhost:3000/Academic/NewAcademic
+Content-Type: application/json
+
+{
+    "Batch_ID":"33",
+    "Batch_Name":"2003",
+    "curriculum_ID":"34",
+    "Academic_year":"2004"
+}
+
+
+###
+GET  http://localhost:3000/Academic/AcademicById/3
+
+
+###
+DELETE  http://localhost:3000/Academic/DeleteAcademic/89

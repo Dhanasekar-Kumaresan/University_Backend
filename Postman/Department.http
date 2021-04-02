@@ -1,0 +1,17 @@
+POST http://localhost:3000/Department/New_Department
+Content-Type: application/json
+
+{
+    "Department_ID":"00ECE",
+    "Department_Name":"Electrical and Communication Engineering"
+}
+
+
+###
+
+GET http://localhost:3000/Department/
+
+###
+GET http://localhost:3000/Department/00IT
+
+

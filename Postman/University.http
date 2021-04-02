@@ -1,0 +1,7 @@
+POST http://localhost:3000/University/NewUniversity
+Content-Type: application/json
+
+{
+    "University_ID":"001",
+    "University_Name":"Anna University"
+}
