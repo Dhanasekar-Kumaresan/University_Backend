@@ -16,9 +16,9 @@ exports.New_Regulation = (req, res) => {
       console.log("Data saved");
       return res.status(201).json({ msg: "Success" });
     })
-    .catch(() => {
+    .catch((error) => {
       console.log("Data not saved");
-      return res.status(401).json({ msg: "Error" });
+      return res.status(401).json({ msg: "Error" ,error:error});
     });
 };
 //fetch all regulation
@@ -37,7 +37,7 @@ exports.GetRegulation = (req, res) => {
 
 //get details by one id
 exports.GetRegulationById = (req, res) => {
-  Regulation.findOne({ Regulation_Id: req.params.id })
+  Regulation.findOne({ Regulation_ID: req.params.id })
     .then((data) => {
       if (!data) {
         return res.status(404).json({ error: "Regulation not found" });
@@ -52,10 +52,11 @@ exports.GetRegulationById = (req, res) => {
 
 //update regulation by id
 exports.Update_RegulationById = (req, res) => {
+  console.log(req.body);
   console.log("updation" + req.params.id);
-  Regulation.updateOne({ Regulation_Id: req.params.id }, req.body)
+  Regulation.updateOne({ Regulation_ID: req.params.id }, req.body)
     .then((data) => {
-      if (data.nModified) {
+      if (data.n) {
         return res.status(200).json({ msg: "Updation Success " });
       } else {
         return res.status(404).json({ msg: "Updation Error,Id Not Found " });
@@ -74,9 +75,9 @@ exports.DeleteRegulation = (req, res) => {
     console.log("id is missing");
     return res.status(400).json({ error: errors });
   }
-  Regulation.deleteOne({ Regulation_Id: req.params.id })
+  Regulation.deleteOne({ Regulation_ID: req.params.id })
     .then(() => {
-      return res.status(200).json({ msg: req.params.id + "deleted" });
+      return res.status(200).json({ msg: "Deletion Success",id:req.params.id });
     })
     .catch((error) => {
       return res.status(404).json({ error: error });

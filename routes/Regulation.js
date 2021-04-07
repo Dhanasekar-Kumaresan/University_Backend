@@ -8,7 +8,7 @@ var {New_Regulation,GetRegulation,DeleteRegulation,Update_RegulationById,GetRegu
 //create new regulation
 router.post("/New_Regulation", 
 
-check('Regulation_Id',"Regulation id is missing").exists(),
+check('Regulation_ID',"Regulation id is missing").exists(),
 check("Regulation_Name","Regulation name is missing").exists(),
 check("Academic_Year","Academic year is missing ").exists().isInt().withMessage("Academic year must be Int"),
 New_Regulation);

@@ -14,9 +14,9 @@ exports.New_Department=(req,res)=>{
       const department = new Department(req.body);
       department
         .save()
-        .then(() => {
+        .then((data) => {
           console.log("Data saved");
-          return res.status(201).json({ msg: "Success" });
+          return res.status(201).json({ msg: "Success" ,data:data});
         })
         .catch(() => {
           console.log("Data not saved");

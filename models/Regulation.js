@@ -4,7 +4,7 @@ const mongoose=require("mongoose")
 const Regulation_Schema=new mongoose.Schema(
 {
 
-Regulation_Id:{
+Regulation_ID:{
     type:String,
     required:true,
     unique:true,

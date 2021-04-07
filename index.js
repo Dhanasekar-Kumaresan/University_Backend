@@ -1,7 +1,7 @@
 require("dotenv").config()
 const mongoose=require("mongoose")
 const express=require("express");
-const bodyparser=require("body-parser")
+const bodyParser=require("body-parser")
 const cors=require("cors")
 
 //console.log("fun"+process.env.DATABASE_URL_UNIVERSITY);
@@ -17,7 +17,8 @@ const Subject_Routes=require("./routes/Subject")
 const University_Routes=require("./routes/University")
 const Batch_Routes=require("./routes/Batch")
 const app=express()
-app.use(bodyparser.json())
+app.use(express.urlencoded());
+  app.use(express.json())
 app.use(cors());
 
 //DB Connection

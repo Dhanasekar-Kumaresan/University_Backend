@@ -3,28 +3,13 @@ const mongoose=require("mongoose")
 
 const Subject=new mongoose.Schema(
     {
-        _id:
-        {
-                Subject_ID:
-                {
-                    type:String,
-                    required:true,
-                    trim:true, 
-                },
-                Department_ID:
-        {
-            type:String,
-            required:true,
-            trim:true,
-        }
-
-        },
         Subject_ID:
         {
             type:String,
             required:true,
+            unique:true,
             trim:true,   
-        },
+        }, 
         Subject_Name:
         {
             type:String,
@@ -47,8 +32,21 @@ const Subject=new mongoose.Schema(
         {
             type:String,
             required:true,
+            trim:true 
+        },
+        Regulation_ID:
+        { 
+            type:String,
+            required:true,
             trim:true
-        }
+        },
+        Credit:
+        { 
+            type:String,
+            required:true,
+            trim:true
+        },
+
     }
 );
 

@@ -12,7 +12,7 @@ Batch_ID:{
 Batch_Name:
 {
     type:String,
-    required:true,
+    required:true, 
     trim:true,
     unique:true
 }
@@ -25,7 +25,6 @@ Academic_Year:
 Regulation_ID:{
     type:String, 
     required:true,
-    unique:true,
     trim:true
 }
 

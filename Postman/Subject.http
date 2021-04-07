@@ -1,21 +1,38 @@
-GET http://localhost:3000/Subject
+GET  http://localhost:3000/Subject
 
 
 ###
-POST http://localhost:3000/Subject/NewSubject
+POST   http://localhost:3000/Subject/NewSubject
 Content-Type: application/json
 
 {
-    "_id":
-    {
-            "Subject_ID":"15I005",
-            "Department_ID":"00IT"
-
-    },
-"Subject_ID":"15I005",
-"Subject_Name":"Data Science and Analysis",
-"isActive":"true",
-"Type":"OE",
-"Department_ID":"00IT"
-
+"Subject_ID":"15MA007",
+"Subject_Name":"Linear Algebra",
+"isActive":true,
+"Type":"core",
+"Department_ID":"00Maths",
+"Regulation_ID":"R2",
+"Credit":"4"
 } 
+
+
+###
+
+GET http://localhost:3000/Subject/GetSubjectByID/15MA007
+
+###
+PUT http://localhost:3000/Subject/UpdateSubject/15I001
+Content-Type:application/json
+
+{
+"Subject_ID":"15I001",
+"Subject_Name":"Data Structures",
+"isActive":true,
+"Type":"OE",
+"Department_ID":"00IT",
+"Regulation_ID":"R2",
+"Credit":"4"
+}
+
+###
+DELETE http://localhost:3000/Subject/Delete_Subject/15MA007

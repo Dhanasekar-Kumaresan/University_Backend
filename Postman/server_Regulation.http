@@ -2,28 +2,28 @@ POST http://localhost:3000/Regulation/New_Regulation
 content-type: application/json
 
 {
-    "Regulation_Name":"R2",
-    "Regulation_Id":"R01",
-    "Academic_Year":[2001,
-    2002]
+    "Regulation_Name":"R6",
+    "Regulation_ID":"R06",
+    "Academic_Year":[2012,
+    2016]
 }
 
 ###
 GET http://localhost:3000/Regulation
 
 ###
-DELETE http://localhost:3000/Regulation/Delete_Regulation/0001
+DELETE http://localhost:3000/Regulation/Delete_Regulation/R06
 
 
 ###
-GET http://localhost:3000/Regulation/1
-
+GET http://localhost:3000/Regulation/R03
+ 
 ###
-PUT http://localhost:3000/Regulation/Update_Regulation/07
+PUT http://localhost:3000/Regulation/Update_Regulation/R06
 content-type: application/json
 
 {
-    "Regulation_Name":"R8",
-    "Regulation_Id":"07",
-    "Academic_Year":[2001,2002]
+    "Regulation_Name":"R06",
+    "Regulation_Id":"R03",
+    "Academic_Year":[2001,2004]
 }

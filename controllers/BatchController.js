@@ -31,7 +31,7 @@ exports.GetBatch=(req,res)=>
 exports.GetBatchByID=(req,res)=>
 {
     console.log(req.params.id)
-    Batch.findOne({Bacth_ID:req.params.id}).then((data)=>
+    Batch.findOne({Batch_ID:req.params.id}).then((data)=>
     {
         return res.status(200).json({data:data})
     }).catch((error)=>

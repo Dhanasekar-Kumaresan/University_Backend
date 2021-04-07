@@ -2,10 +2,10 @@ POST http://localhost:3000/Batch/NewBatch
 Content-Type: application/json
 
 {
- "Batch_ID":"R15-2005",
- "Batch_Name":"R152005 Batch",
- "Academic_Year":2005,
- "Regulation_ID":"R15"
+ "Batch_ID":"R20-2022",
+ "Batch_Name":"R202022 Batch",
+ "Academic_Year":[2022,2025],
+ "Regulation_ID":"R20"
 }
 
 ###
@@ -14,4 +14,4 @@ GET http://localhost:3000/Batch
 
 ###
 
-Get http://localhost:3000/Batch/
+Get http://localhost:3000/Batch/R20-2022
