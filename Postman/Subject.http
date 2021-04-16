@@ -36,3 +36,20 @@ Content-Type:application/json
 
 ###
 DELETE http://localhost:3000/Subject/Delete_Subject/15MA007
+
+
+###
+POST   http://localhost:3000/Subject/MultipleSubject
+Content-Type: application/json
+[
+{
+"Subject_ID":"15MA007",
+"Subject_Name":"Linear Algebra",
+"isActive":true,
+"Type":"core",
+"Department_ID":"00Maths",
+"Regulation_ID":"R2",
+"Credit":"4"
+} 
+
+]

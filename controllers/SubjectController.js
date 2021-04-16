@@ -105,3 +105,16 @@ exports.Delete_Subject=(req,res)=>
       return res.status(404).json({ error: error });
     });
 }
+
+
+//multiple subject updation
+exports.MultipleSubejct=(req,res)=>
+{
+  Subject.insertMany(req.body).then((data)=>
+  {
+    return res.status(200).json({msg:"Success",data:data})
+  }).catch((data)=>
+  {
+    return res.status(409).json({msg:"Error",data:data})
+  })
+}

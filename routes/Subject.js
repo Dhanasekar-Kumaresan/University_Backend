@@ -1,7 +1,7 @@
 const express=require("express")
 const router=express.Router()
 const {check}=require("express-validator")
-var {GetSubject,NewSubject,UpdateSubject,GetSubjectByID,Delete_Subject}=require("../controllers/SubjectController")
+var {GetSubject,NewSubject,UpdateSubject,GetSubjectByID,Delete_Subject,MultipleSubejct}=require("../controllers/SubjectController")
 
 
 
@@ -21,6 +21,9 @@ router.get("/GetSubjectByID/:id",GetSubjectByID)
 
 //get the all Subjects
 router.get("",GetSubject);
+
+//bulk new Subject
+router.post("/MultipleSubject",MultipleSubejct);
 
 //delete the subject
 router.delete("/Delete_Subject/:id",Delete_Subject);
