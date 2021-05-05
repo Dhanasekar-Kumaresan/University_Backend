@@ -26,7 +26,7 @@ Content-Type:application/json
 
 {
 "Subject_ID":"15I001",
-"Subject_Name":"Data Structures",
+"Subject_Name":"Data Structure",
 "isActive":true,
 "Type":"OE",
 "Department_ID":"00IT",
@@ -35,21 +35,76 @@ Content-Type:application/json
 }
 
 ###
-DELETE http://localhost:3000/Subject/Delete_Subject/15MA007
+DELETE http://localhost:3000/Subject/Delete_Subject/15I010
+
+
+
+
+
+
+
+
 
 
 ###
 POST   http://localhost:3000/Subject/MultipleSubject
 Content-Type: application/json
+
 [
 {
-"Subject_ID":"15MA007",
-"Subject_Name":"Linear Algebra",
+"Subject_ID":"15MA008",
+"Subject_Name":"Calculus",
 "isActive":true,
 "Type":"core",
 "Department_ID":"00Maths",
 "Regulation_ID":"R2",
 "Credit":"4"
-} 
+},
+{
+      "Subject_ID": "15I010",
+      "Subject_Name": "Advanced Data Structure",
+      "isActive": true,
+      "Type": "core",
+      "Department_ID": "00IT",
+      "Regulation_ID": "R2",
+      "Credit": "4",
+      "__v": 0
+    }
+
+]
+
+###
+
+
+
+
+
+
+//heroku services
+
+
+POST   https://hidden-sierra-56427.herokuapp.com/Subject/MultipleSubject
+Content-Type: application/json
+
+[
+{
+"Subject_ID":"15MA008",
+"Subject_Name":"Calculus",
+"isActive":true,
+"Type":"core",
+"Department_ID":"00Maths",
+"Regulation_ID":"R2",
+"Credit":"4"
+},
+{
+      "Subject_ID": "15I010",
+      "Subject_Name": "Advanced Data Structure",
+      "isActive": true,
+      "Type": "core",
+      "Department_ID": "00IT",
+      "Regulation_ID": "R2",
+      "Credit": "4",
+      "__v": 0
+    }
 
 ]

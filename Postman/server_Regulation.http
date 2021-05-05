@@ -19,11 +19,94 @@ DELETE http://localhost:3000/Regulation/Delete_Regulation/R06
 GET http://localhost:3000/Regulation/R03
  
 ###
-PUT http://localhost:3000/Regulation/Update_Regulation/R06
+PUT http://localhost:3000/Regulation/Update_Regulation/R5
 content-type: application/json
 
 {
-    "Regulation_Name":"R06",
-    "Regulation_Id":"R03",
-    "Academic_Year":[2001,2004]
+    "Regulation_Name":"R5",
+    "Regulation_Id":"R5",
+    "Academic_Year":[2010,2014],
+    "Department_Details":
+[
+{
+    "Department_ID":"AI",
+    "Department_Name":"artificial intelligence",
+    "total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+},
+{
+    "Department_ID":"IT",
+    "Department_Name":"Informaton Technology",
+    "total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
 }
+]
+
+}
+
+
+
+###
+
+post http://localhost:3000/Regulation/New_Regulation
+content-type: application/json
+
+{
+"Regulation_ID":"R11",
+"Regulation_Name":"R11",
+"Academic_Year":[2016,2020],
+"Department_Details":
+[
+{
+    "Department_ID":"AI",
+    "Department_Name":"artificial intelligence",
+    "total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+},
+{
+    "Department_ID":"IT",
+    "Department_Name":"Informaton Technology",
+    "total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+}
+]
+
+
+}
+
+
+
+###  
+get http://localhost:3000/Regulation/R11
