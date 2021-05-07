@@ -7,7 +7,7 @@ const cors=require("cors")
 //console.log("fun"+process.env.DATABASE_URL_UNIVERSITY);
 
 
-
+const Course_Routes=require("./routes/CourseRoutes")
 const Regulation_Routes=require("./routes/Regulation");
 const Academic_Routes=require("./routes/Academic")
 const routes=require("./routes/routes")
@@ -28,8 +28,8 @@ mongoose.connect(process.env.DATABASE_URL_UNIVERSITY, {
     useCreateIndex: true,
   }).then(()=>{
       console.log("Database Connected");
-  }).catch(()=>{
-      console.log("Connection Error");
+  }).catch((e)=>{
+      console.log(e);
   });
 
 
@@ -49,6 +49,8 @@ app.use("/Subject",Subject_Routes);
 
 //university
 app.use("/University",University_Routes);
+
+app.use("/Course",Course_Routes);
 
 //Batch
 app.use("/Batch",Batch_Routes)

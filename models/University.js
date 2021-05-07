@@ -1,5 +1,5 @@
 const mongoose=require("mongoose")
-const {Insitution}=require("./Insitution")
+const {Institution}=require("./Institution")
 const University=new mongoose.Schema({
     University_ID:
     {
@@ -13,8 +13,8 @@ const University=new mongoose.Schema({
         unique:true,
         required:true
     },
-    Insitutions:[
-        {type:mongoose.Schema.Types.ObjectID,ref:'Insitution.Instution_ID'}
+    Institutions:[
+        {type:mongoose.Schema.Types.ObjectID,ref:'Institution.INSTITUTION_ID'}
     ]
  
 })
