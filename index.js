@@ -16,6 +16,8 @@ const Department_Routes=require("./routes/DepartmentRoutes")
 const Subject_Routes=require("./routes/Subject")
 const University_Routes=require("./routes/University")
 const Batch_Routes=require("./routes/Batch")
+const Semester_Routes=require("./routes/Semester")
+
 const app=express()
 app.use(express.urlencoded());
   app.use(express.json())
@@ -54,6 +56,10 @@ app.use("/Course",Course_Routes);
 
 //Batch
 app.use("/Batch",Batch_Routes)
+
+//Semester
+app.use("/Semester",Semester_Routes)
+
 app.listen(process.env.PORT,()=>{
     console.log("server started");
 })

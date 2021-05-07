@@ -1,0 +1,15 @@
+POST http://localhost:3000/Semester/New_Semester
+Content-Type: application/json
+
+{
+    "SEMESTER_ID":"7",
+    "DEPARTMENT_ID":"1",
+    "COURSE_ID":"1",
+    "INSTITUTION_ID":"1"
+}
+
+
+###
+
+
+GET http://localhost:3000/Semester/getSemesterList/1/1/1
