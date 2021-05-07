@@ -12,7 +12,7 @@ const Regulation_Routes=require("./routes/Regulation");
 const Academic_Routes=require("./routes/Academic")
 const routes=require("./routes/routes")
 
-const Department_Routes=require("./routes/Department")
+const Department_Routes=require("./routes/DepartmentRoutes")
 const Subject_Routes=require("./routes/Subject")
 const University_Routes=require("./routes/University")
 const Batch_Routes=require("./routes/Batch")
@@ -22,7 +22,7 @@ app.use(express.urlencoded());
 app.use(cors());
 
 //DB Connection
-mongoose.connect(process.env.DATABASE_URL_UNIVERSITY, {
+mongoose.connect(process.env.DATABASE_URL_UNIVERSITY2_MINE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
