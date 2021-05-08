@@ -7,7 +7,7 @@ var {GetSubject,NewSubject,UpdateSubject,GetSubjectByID,Delete_Subject,MultipleS
 
 
 //new Subject
-router.post("/NewSubject",check("Subject_ID").exists().withMessage("Subject_Id is missing"),
+router.post("/NewSubject/:ins_id/:course_id/:dept_id/:sem_id",check("Subject_ID").exists().withMessage("Subject_Id is missing"),
 check("Subject_Name").exists().withMessage("Subject_Name is missing"),
 check("isActive").exists().withMessage("isActive is missing"),
 check("Department_ID").exists().withMessage("Department_Id is missing"),
@@ -27,5 +27,8 @@ router.post("/MultipleSubject",MultipleSubejct);
 
 //delete the subject
 router.delete("/Delete_Subject/:id",Delete_Subject);
+
+//get Subjects according to semester
+
 
 module.exports=router;
