@@ -18,16 +18,16 @@ exports.New_Department=(req,res)=>{
           console.log("Data saved");
           return res.status(201).json({ msg: "Success" ,data:data});
         })
-        .catch(() => {
-          console.log("Data not saved");
+        .catch((e) => {
+          console.log("Data not saved" +e);
           return res.status(401).json({ msg: "Error" });
         });
 }
 
 //get the department
-exports.GetDepartment=(req,res)=>
-{
-  Department.find().then((items)=>
+exports.getDepartments=(req,res)=>
+{console.log(req.params.ins_id, req.params.course_id);
+  Department.find({$and:[{INSTITUTION_ID: req.params.ins_id},{COURSE_ID: req.params.course_id}]}).then((items)=>
   {
     console.log(items);
 return res.status(200).json({data:items});

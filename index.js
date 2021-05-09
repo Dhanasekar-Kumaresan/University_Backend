@@ -40,7 +40,7 @@ const Regulation_Routes=require("./routes/Regulation");
 const Academic_Routes=require("./routes/Academic")
 const routes=require("./routes/routes")
 
-const Department_Routes=require("./routes/Department")
+const Department_Routes=require("./routes/DepartmentRoutes")
 const Subject_Routes=require("./routes/Subject")
 
 const Batch_Routes=require("./routes/Batch")
@@ -60,10 +60,13 @@ app.use("/Department",Department_Routes);
 app.use("/Subject",Subject_Routes);
 
 
+app.use("/Course",Course_Routes);
+
 //Batch
-app.use("/Batch",Batch_Routes) 
+app.use("/Batch",Batch_Routes)
 
-
+//Semester
+app.use("/Semester",Semester_Routes)
 
 app.listen(process.env.PORT,()=>{
     console.log("server started");

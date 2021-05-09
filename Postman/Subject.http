@@ -2,15 +2,15 @@ GET  http://localhost:3000/Subject
 
 
 ###
-POST   http://localhost:3000/Subject/NewSubject
+POST   http://localhost:3000/Subject/NewSubject/1/1/1/3
 Content-Type: application/json
 
 {
-"Subject_ID":"15MA007",
-"Subject_Name":"Linear Algebra",
+"Subject_ID":"SUB7",
+"Subject_Name":"Computer Graphics",
 "isActive":true,
 "Type":"core",
-"Department_ID":"00Maths",
+"Department_ID":"1",
 "Regulation_ID":"R2",
 "Credit":"4"
 } 

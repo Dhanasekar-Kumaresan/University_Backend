@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const Subject = require("../models/Subject");
+const Semester = require("../models/Semester");
 
 //get the all subject
 exports.GetSubject = (req, res) => {
@@ -15,7 +16,6 @@ exports.GetSubject = (req, res) => {
 
 //create a new subject
 exports.NewSubject = (req, res) => {
-  console.log(req.body);
   var Error = validationResult(req);
   if (!Error.isEmpty()) {
     res.status(400).json({ msg: "Bad Request", error: Error });
@@ -24,12 +24,22 @@ exports.NewSubject = (req, res) => {
   subject
     .save()
     .then((data) => {
-      return res.status(201).json({ msg: "Successs", data: data });
+      Semester.findOne({$and:[{INSTITUTION_ID: req.params.ins_id},{COURSE_ID: req.params.course_id},{DEPARTMENT_ID: req.params.dept_id},{SEMESTER_ID : req.params.sem_id}]}).then((item)=>{
+        console.log("item is ",item)
+        Semester.findByIdAndUpdate(
+          item._id,
+          { $push: { SUBJECTS: data._id } },
+          { new: true, useFindAndModify: false }
+         ).then((semdata)=>{console.log("sem data updated succesfully")}).catch((e)=>{console.log(e)});
+      }).catch((e)=>{console.log(e)});
+       return res.status(201).json({ msg: "Successs", data: data });
     })
     .catch((error) => {
       return res.status(404).json({ msg: "Error", error: error });
     });
 };
+
+
 
 //update the Subject
 exports.UpdateSubject = (req, res) => {
