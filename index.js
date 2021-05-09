@@ -20,13 +20,15 @@ app.use(express.urlencoded());
   app.use(express.json())
 app.use(cors());
 
-//console.log("fun"+process.env.DATABASE_URL_UNIVERSITY);
 
-//raghu
+
 const universityRouter=require("./routes/university-router")
 const studentRouter=require("./routes/student-router")
 
-//routes
+const Course_Routes=require("./routes/CourseRoutes")
+const Semester_Routes=require("./routes/Semester")
+
+
 app.use("/university",universityRouter)
 app.use("/student",studentRouter)
 
