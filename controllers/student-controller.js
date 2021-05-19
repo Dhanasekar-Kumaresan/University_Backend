@@ -63,6 +63,7 @@ async function searchStudentName(req, res) {
     try {
       let student = await Student.find({
         name: new RegExp(req.params.text, "i"),
+        status :{$nin:["approved" , "onHold"] },
       });
       if (!student.length && student.length==0) {
         return res
