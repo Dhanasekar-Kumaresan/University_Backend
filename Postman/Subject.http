@@ -2,7 +2,7 @@ GET  http://localhost:3000/Subject
 
 
 ###
-POST   http://localhost:3000/Subject/NewSubject/1/1/1/3
+POST   http://localhost:3000/Subject/NewSubject/1/1/1/7
 Content-Type: application/json
 
 {

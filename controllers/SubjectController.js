@@ -22,7 +22,7 @@ exports.NewSubject = (req, res) => {
   }
   var subject = new Subject(req.body);
   subject
-    .save()
+    .save() 
     .then((data) => {
       Semester.findOne({$and:[{INSTITUTION_ID: req.params.ins_id},{COURSE_ID: req.params.course_id},{DEPARTMENT_ID: req.params.dept_id},{SEMESTER_ID : req.params.sem_id}]}).then((item)=>{
         console.log("item is ",item)

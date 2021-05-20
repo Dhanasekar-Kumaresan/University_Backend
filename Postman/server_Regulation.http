@@ -110,3 +110,136 @@ content-type: application/json
 
 ###  
 get http://localhost:3000/Regulation/R11
+
+
+### 
+POST https://university-app-2021.herokuapp.com/Regulation/New_Regulation
+content-type: application/json
+
+{
+"Regulation_ID":"R1",
+"Regulation_Name":"R1",
+"Academic_Year":[2010,2014],
+"Department_Details":
+[
+{
+    "Department_ID":"AI",
+    "Department_Name":"artificial intelligence",
+    "total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+},
+{
+    "Department_ID":"IT",
+    "Department_Name":"Informaton Technology",
+    "total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+}
+]
+
+
+}
+
+ 
+
+
+###
+//updated Design
+
+post http://localhost:3000/Regulation/newregulation
+Content-Type: application/json
+
+{
+"Regulation_ID":"R1",
+"Regulation_Name":"R1",
+"Academic_Year":[2015,2019],
+"Grading":
+{
+"GradeType":"Points",
+"RangeLow":5,
+"RangeHigh":8,
+"GradingDetails":[
+        {
+     "point" : 10,
+            "grade" : "O",
+            "description" : "Excellent",
+            "percentage" : 95
+        },
+        {
+            "point" : 9,
+            "grade" : "A+",
+            "description" : "Very Good",
+            "percentage" : 85
+        },{
+            "point" : 8,
+            "grade" : "A",
+            "description" : "Good",
+            "percentage" : 75
+        },{
+            "point" : 7,
+            "grade" : "B+",
+            "description" : "Bad",
+            "percentage" : 65
+        }
+
+]
+
+
+
+},
+"Department_Details":[
+{
+    "Department_ID":"AI",
+    "Department_Name":"artificial intelligence",
+    "Total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+},
+{
+    "Department_ID":"IT",
+    "Department_Name":"Informaton Technology",
+    "Total_Credit":15,
+    "Semester_Count":3,
+    "Credits_Details":
+    [
+        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
+    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
+
+    ]
+
+}
+]
+}
+
+
+###
+get http://localhost:3000/Regulation/getregulation
+
+###
+get http://localhost:3000/Regulation/getregulation/R1
+
+###
+get http://localhost:3000/Regulation/getdepartmentdetailsbyid/609c1ee77fd9dd5b18d8ed07

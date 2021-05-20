@@ -15,3 +15,16 @@ GET http://localhost:3000/Department
 GET http://localhost:3000/Department/00IT
 
 
+
+
+# ------------------------------------------------
+###
+POST https://university-app-2021.herokuapp.com/Department/New_Department
+
+Content-Type: application/json
+
+{
+    "DEPARTMENT_ID":"AI",
+    "DEPARTMENT_NAME":"artificial intelligence",
+    "INSTITUTION_ID":
+}
