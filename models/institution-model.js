@@ -12,6 +12,7 @@ const Institutions=new Schema({
     UGC_Reg_ID:{type:String, required:false},
     Institution_description:{type:String, required:false},
     Institution_type:{type:String, required:false},
+    Institution_template:{type:String ,required:false},
     Institution_established:{type:Date, required:false},
     ownershipType:{type:String, required:false},
     hideCarousel:{type:Boolean,required:false},
@@ -23,6 +24,12 @@ const Institutions=new Schema({
         AICTE_Reg_ID:{type:String, required:false},
         UGC_Reg_ID:{type:String, required:false},
         Course_type:{type:String, required:false},
+        Seats:{type:Number, required:false},
+        Quotas:[{
+            Quota_name:{type:String ,required:true},
+            Quota_percentage:{type:String,required:false},
+            Quota_allocation:{type:String, required:false}
+        }],
         Course_duration:{type:String, required:false},
     }],
     University_id:{type:mongoose.Schema.Types.ObjectId, ref:'university'}

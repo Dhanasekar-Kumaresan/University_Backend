@@ -30,11 +30,12 @@ async function addInstitution(req, res) {
     let university = await University.findOne({
       University_id: body.University_id,
     });
-
-    body.University_id = university._id;
-
+    if(university)
+    {
+      body.University_id = university._id;
+    }
     let institution_body = new Institution(body);
-
+    console.log(institution_body)
     let institution = await institution_body.save();
 
     if (institution) {

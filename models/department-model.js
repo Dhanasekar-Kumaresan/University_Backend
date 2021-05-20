@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
-const Departments= new mongoose.Schema({
-    Department:[Department]
-})
+
 const Department = new mongoose.Schema({
   Department_name: {
     type: String,
@@ -18,11 +16,13 @@ const Department = new mongoose.Schema({
   },
   Seats:{
       type:Number, required:false
-  },
+  }
+});
+const Departments= new mongoose.Schema({
   Course_id: {
     type:mongoose.Schema.Types.ObjectId, 
     ref:'institutions'
   },
-});
-
+  Department:[Department]
+})
 module.exports = mongoose.model("Department", Departments);
