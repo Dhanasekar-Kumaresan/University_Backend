@@ -26,8 +26,9 @@ Regulation_ID:{
     type:String, 
     required:true,
     trim:true
-}
+},
 
+//student list
 }
 )
 

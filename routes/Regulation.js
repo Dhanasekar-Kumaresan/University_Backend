@@ -7,8 +7,8 @@ var {New_Regulation,GetRegulation,DeleteRegulation,Update_RegulationById,GetRegu
 
 
 //Updated Design
-router.post("/newregulation",newregulation);
-router.get("/getdepartmentdetailsbyid/:id",getdepartmentdetailsbyid);
+router.post("/newregulation/:id",newregulation);
+router.get("/getdepartmentdetailsbyid/:instu_id/:regu_id",getdepartmentdetailsbyid);
 router.get("/getregulation/:id",getregulationbyid);
 router.get("/getregulation",getregulation);
 

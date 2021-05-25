@@ -3,7 +3,11 @@ const mongoose=require("mongoose")
 
 const Department=new mongoose.Schema(  
   {
-      Department_ID:
+    Subject:
+    {
+      type:Array
+    }
+    ,Department_ID:
       {
         type:String,
         required:true,
@@ -66,21 +70,26 @@ GradingDetails:
 
 
 
-const Regulation_Schema=new mongoose.Schema(
+const Regulations_Schema=new mongoose.Schema(
 {
+Active:
+{
+  type:Boolean
+},
 
-Regulation_ID:{
+Regulation_ID: 
+{
     type:String,
-    required:true,
+    required:true, 
     trim:true,
-    unique:true
+  
 },
 Regulation_Name:
 {
     type:String,
     required:true,
     trim:true,
-    unique:true
+   
 }
 ,
 Academic_Year:
@@ -96,11 +105,58 @@ Grading:
 },
 Department_Details:[Department]
 
+
+
 }
-);
+); 
+
+const Regulation_Schema=new mongoose.Schema(
+{
+
+  Institution_id:
+    { 
+    type:String, 
+     required:true,
+     unique:true
+    },
+     Regulation:[Regulations_Schema]
+}
+)
 
 
 
 
 module.exports=mongoose.model("Regulation",Regulation_Schema);
+//model 
+// {
+// INSTUTUION_id:"",
+
+// regulation:[
+// {},{},
+// {}
+
+// ]
+
+
+
+// }
+
+
+
+// subject:[
+
+
+// {
+// regulation:"",
+// subject_list:[
+//   {},
+//   {}
+// ]
+
+// }
+
+
+// ]
+
+
 
