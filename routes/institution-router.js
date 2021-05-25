@@ -5,5 +5,5 @@ const institutionRouter=express.Router()
 
 institutionRouter.get('/view',institutionCtrl.getInstitution)
 institutionRouter.post('/add',institutionCtrl.addInstitution)
-
+institutionRouter.put('/quota/:id',institutionCtrl.addQuota)
 module.exports=institutionRouter

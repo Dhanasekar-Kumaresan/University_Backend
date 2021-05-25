@@ -58,7 +58,100 @@ async function addInstitution(req, res) {
     }
   }
 }
+// async function addQuota(req,res){
+//           let body =req.body
+//           if(!body){
+//             return res.status(400).json({
+//               success: false,
+//               message: "Need a valid input",
+//             });
+//           }    
+//           try{
+//             let update_data;
+//             Institution.findOne({Institution_id:req.params.id}).then( (institution) =>{
+              
+//               Institution.updateOne({_id:institution._id},{$elemMatch :{courseDetails:{$elemMatch:{Course_id: {$each:body.CourseDetails.Course_id}}}}},
+//                 {
+//                   $push:{Quotas:{ $each:body.CourseDetails.Quotas}}
+//                 }).then( (data, err)=>{
+//                   if(data){console.log(data)}
+//                   else{console.log(err)}
+//                 })
+                
+//             // let  Quota_details= institution.courseDetails.forEach( (output) => {
+//             //      let output_details=body.CourseDetails.forEach( (input) =>{
+//             //           if(output.Course_id == input.Course_id){
+//             //               output.Quotas=input.Quotas
+//             //           }
+//             //       })
+//             //       update_data=output;
+//             //   });
+              
+//              });
+//         //     console.log(update_data)
+//         //   let data=Institution.updateOne({Institution_id:req.params.id},
+//         //       {
+//         //       $set:{
+//         //         courseDetails:update_data
+//         //        }
+//         // });
+//         // if(data.ok){
+//         //   return res.status(200).json({
+//         //     success: true,
+//         //     message: "Quota Detail added successfully!",
+//         //   });
+//         // }
+//         // body.CourseDetails.forEach(element => {
+           
+//         // });
+       
+//           }
+//           catch(e)
+//           {
+//             return res.status(400).json({
+//               success: false,
+//               message: e,
+//             });
+//           }
+// }
+
+async function addQuota(req,res){
+  let body =req.body
+            if(!body){
+              return res.status(400).json({
+                success: false,
+                message: "Need a valid input",
+              });
+            }
+  //  for(i=0;i<body.CourseDetails.length;i++){
+    Institution.updateOne(
+      {
+      Institution_id:req.params.Institution_id
+      // "courseDetails.Course_id":body.CourseDetails[i].Course_id
+            
+      // courseDetails:{$elemMatch:{Course_id:{$eq:body.CourseDetails[0].Course_id}}}
+      },
+    {$set:
+      {Course_duration:{$each : body.Course_duration} }
+    }
+    
+    ).then ( (data) =>{ 
+      console.log("Success",data)     
+    }).catch( (e) =>{
+      console.log("Error",e)
+    })
+  //   console.log(i,body.CourseDetails[i].Course_id, "Quotas",body.CourseDetails[i] )
+  //  }
+  
+    }
+
+
+
+
+
+
 module.exports = {
   getInstitution,
   addInstitution,
+  addQuota
 };

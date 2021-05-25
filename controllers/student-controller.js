@@ -26,6 +26,7 @@ async function addStudent(req,res){
         fakeData.Xpercent=Math.floor(Math.random() * (100 - 50)) + 50 +"%"
         fakeData.XIIpercent=Math.floor(Math.random() * (100 - 50)) + 50 +"%"
         fakeData.profilePic=faker.image.avatar();
+        fakeData.course="Medical"
         //console.log(fakeData);
         const studentData=new Student(fakeData)
        
