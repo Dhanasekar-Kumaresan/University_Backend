@@ -1,5 +1,8 @@
 const { validationResult } = require("express-validator");
 const Regulation = require("../models/Regulation");
+const Department_Details = require("../models/DepartmentDetails");
+const { json } = require("body-parser");
+const { Mongoose } = require("mongoose");
 
 //create Regulation
 exports.New_Regulation = (req, res) => {
@@ -18,7 +21,7 @@ exports.New_Regulation = (req, res) => {
     })
     .catch((error) => {
       console.log("Data not saved");
-      return res.status(401).json({ msg: "Error" ,error:error});
+      return res.status(401).json({ msg: "Error", error: error });
     });
 };
 //fetch all regulation
@@ -77,9 +80,104 @@ exports.DeleteRegulation = (req, res) => {
   }
   Regulation.deleteOne({ Regulation_ID: req.params.id })
     .then(() => {
-      return res.status(200).json({ msg: "Deletion Success",id:req.params.id });
+      return res
+        .status(200)
+        .json({ msg: "Deletion Success", id: req.params.id });
     })
     .catch((error) => {
       return res.status(404).json({ error: error });
+    });
+};
+
+// --------------------------------------------------------------------------------
+
+//updated Design
+
+exports.newregulation = (req, res) => {
+  var Payload = req.body;
+  Regulation.find({ Institution_id: req.params.id })
+    .then((data) => {
+      if (!data.length) {
+        console.log("if",Payload)
+        var regulation = new Regulation({
+          Institution_id: req.params.id,
+          Regulation: Payload.Regulation
+        });
+        console.log(regulation);
+        regulation
+          .save()
+          .then((data) => {
+            return res.status(200).json({ msg: "Success", data: data });
+          })
+          .catch((error) => {
+            return res.status(404).json({ msg: "error", error: error });
+          });
+      }
+      else
+      {
+        console.log("else");
+       Regulation.updateOne(
+        {Institution_id:req.params.id},
+        {$push:{"Regulation":Payload.Regulation}})
+        .then((data)=>
+        {
+          return res.status(200).json({ msg: "Success", data: data });
+        })
+        .catch((error) => {
+          return res.status(404).json({ msg: "error", error: error });
+        });
+
+
+      }
+    })
+    .catch((error) => {
+      console.log("rere",error);
+    });
+};
+
+//all regulation
+exports.getregulation = (req, res) => {
+  Regulation.find()
+    .then((data) => {
+      return res.status(200).json({ msg: "Success", data: data });
+    })
+    .catch((error) => {
+      return res.status(404).json({ error: error });
+    });
+};
+
+//fetch by id
+exports.getregulationbyid = (req, res) => {
+  Regulation.findOne({ Institution_id: req.params.id })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({ error: "Regulation not found" });
+      } else {
+        return res.status(200).json({ data: data });
+      }
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: "Server Error" });
+    });
+};
+
+//getdepartmentdetailsbyid
+exports.getdepartmentdetailsbyid = async (req, res) => {
+  console.log(req.params.instu_id);
+  Regulation.findOne({$and:[{Institution_id: req.params.instu_id,Regulation:{$elemMatch:{Regulation_ID:req.params.regu_id}}}
+  
+  
+  ]},{"Regulation.$":1})
+    .then((data) => {
+      console.log(!data.length);
+      if (!data.length) {
+        return res.status(200).json({"msg": "success",data: data });
+       
+      } else {
+         return res.status(404).json({ error: "Department not found" });
+      }
+    })
+    .catch((error) => {
+      return res.status(404).json({ msg: "Regulation/Institution Not Found" });
     });
 };

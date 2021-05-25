@@ -17,6 +17,6 @@ GET http://localhost:3000/Semester/getSemesterList/1/1/1
 ###
 
 
-GET http://localhost:3000/Semester/getSubjectsInSpecificSem/1/1/1/3
+GET http://localhost:3000/Semester/getSubjectsInSpecificSem/1/1/1/7
 
 
