@@ -129,13 +129,13 @@ async function addInstitution(req, res) {
 //   //  for(i=0;i<body.CourseDetails.length;i++){
 //     Institution.updateOne(
 //       {
-//       Institution_id:req.params.Institution_id
-//       // "courseDetails.Course_id":body.CourseDetails[i].Course_id
+//       Institution_id:req.params.id,
+//        "courseDetails.Course_id":body.CourseDetails[0].Course_id
             
 //       // courseDetails:{$elemMatch:{Course_id:{$eq:body.CourseDetails[0].Course_id}}}
 //       },
 //     {$set:
-//       {Course_duration:{$each : body.Course_duration} }
+//       {"courseDetails.$[].Course_duration": body.Course_duration}
 //     }
     
 //     ).then ( (data) =>{ 
@@ -154,25 +154,24 @@ async function addInstitution(req, res) {
 function addQuota(req,res)
 {
   var payload=req.body;
-  console.log(payload.CourseDetails[0]);
 
   Institution.updateOne(
   {
     Institution_id:req.params.id,
-    "courseDetails.Course_id":payload.CourseDetails[0].Course_id
+    "courseDetails.Course_id":payload.Course_id
   }
   ,
   {
     $set:
     {
-      "courseDetails.$.Quotas":payload.CourseDetails[0].Quotas
+      "courseDetails.$.Quotas":payload.Quotas
     }
   }
   
   ).
   then((data)=>
   {
-    return res.status(200).json({data:data})
+    return res.status(200).json({msg:"Quota Updated Successfully", data:data})
   })
   .catch((error)=>
   {
