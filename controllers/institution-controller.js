@@ -115,35 +115,75 @@ async function addInstitution(req, res) {
 //           }
 // }
 
-async function addQuota(req,res){
-  let body =req.body
-            if(!body){
-              return res.status(400).json({
-                success: false,
-                message: "Need a valid input",
-              });
-            }
-  //  for(i=0;i<body.CourseDetails.length;i++){
-    Institution.updateOne(
-      {
-      Institution_id:req.params.Institution_id
-      // "courseDetails.Course_id":body.CourseDetails[i].Course_id
+
+
+// -----------------------raghu 
+// async function addQuota(req,res){
+//   let body =req.body
+//             if(!body){
+//               return res.status(400).json({
+//                 success: false,
+//                 message: "Need a valid input",
+//               });
+//             }
+//   //  for(i=0;i<body.CourseDetails.length;i++){
+//     Institution.updateOne(
+//       {
+//       Institution_id:req.params.Institution_id
+//       // "courseDetails.Course_id":body.CourseDetails[i].Course_id
             
-      // courseDetails:{$elemMatch:{Course_id:{$eq:body.CourseDetails[0].Course_id}}}
-      },
-    {$set:
-      {Course_duration:{$each : body.Course_duration} }
-    }
+//       // courseDetails:{$elemMatch:{Course_id:{$eq:body.CourseDetails[0].Course_id}}}
+//       },
+//     {$set:
+//       {Course_duration:{$each : body.Course_duration} }
+//     }
     
-    ).then ( (data) =>{ 
-      console.log("Success",data)     
-    }).catch( (e) =>{
-      console.log("Error",e)
-    })
-  //   console.log(i,body.CourseDetails[i].Course_id, "Quotas",body.CourseDetails[i] )
-  //  }
+//     ).then ( (data) =>{ 
+//       console.log("Success",data)     
+//     }).catch( (e) =>{
+//       console.log("Error",e)
+//     })
+//   //   console.log(i,body.CourseDetails[i].Course_id, "Quotas",body.CourseDetails[i] )
+//   //  }
   
+//     }
+
+
+
+    //dk
+function addQuota(req,res)
+{
+  var payload=req.body;
+  console.log(payload.CourseDetails[0]);
+
+  Institution.updateOne(
+  {
+    Institution_id:req.params.id,
+    "courseDetails.Course_id":payload.CourseDetails[0].Course_id
+  }
+  ,
+  {
+    $set:
+    {
+      "courseDetails.$.Quotas":payload.CourseDetails[0].Quotas
     }
+  }
+  
+  ).
+  then((data)=>
+  {
+    return res.status(200).json({data:data})
+  })
+  .catch((error)=>
+  {
+    return res.status(404).json({msg:"error",error:error})
+  })
+
+
+
+  
+}
+
 
 
 
