@@ -54,8 +54,7 @@ const Curriculum_Routes=require("./routes/CurriculumRoutes")
 
 //Routes
 app.use("/",routes);
-//Regulation Routes
-app.use("/Regulation",Regulation_Routes);
+
 
 //Academic Routes
 app.use("/Academic",Academic_Routes);
@@ -63,8 +62,7 @@ app.use("/Academic",Academic_Routes);
 //Department
 app.use("/Department",Department_Routes);
 
-//Subject
-app.use("/Subject",Subject_Routes);
+
 
 
 app.use("/Course",Course_Routes);
@@ -76,8 +74,13 @@ app.use("/Batch",Batch_Routes)
 app.use("/Semester",Semester_Routes)
 
 
+// ---------------------------updated design----------------------------------------------------------------------------------------
 
+//Regulation Routes
+app.use("/Regulation",Regulation_Routes);
 
+//Subject
+app.use("/Subject",Subject_Routes);
 
 //Curriculums
 app.use("/curriculum",Curriculum_Routes)

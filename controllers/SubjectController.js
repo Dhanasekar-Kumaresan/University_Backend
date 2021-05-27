@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const Subject = require("../models/Subject");
 const Semester = require("../models/Semester");
+const Regulation = require("../models/Regulation");
 
 //get the all subject
 exports.GetSubject = (req, res) => {
@@ -127,4 +128,233 @@ exports.MultipleSubejct=(req,res)=>
   {
     return res.status(409).json({msg:"Error",data:data})
   })
+}
+
+
+
+
+// -----------------------------updated design-------------------------------------------
+
+
+exports.addsubject=(req,res)=>
+{
+  var Payload=req.body;
+  console.log(Payload)
+  var institution=req.params.instu_id;
+  var regulation=req.params.regu_id;
+  var departement=req.params.dep_id;
+  console.log(institution,regulation,departement);
+
+  Regulation.updateMany(
+{
+  Institution_id:institution,
+  Regulation:
+  {
+    $elemMatch:
+            {
+              Regulation_ID:regulation,
+              Department_Details:
+              {
+                  $elemMatch:
+                    {
+                      Department_ID:departement
+                    }
+              }
+            }
+  },
+
+  
+  
+  
+  //"Regulation.$.Department_Details.Department_ID":departement
+
+}
+
+,
+{
+  $push:
+  {
+    "Regulation.$[outer].Department_Details.$[inner].Subject":Payload
+  }
+}
+,
+{
+  "arrayFilters":
+            [
+                {
+
+                 "outer.Regulation_ID":regulation
+
+                }
+                ,
+                {
+
+                  "inner.Department_ID":departement
+                } 
+
+              ]
+}
+)
+.then((data)=>
+{
+  return res.status(200).json({data:data})
+})
+.catch((error)=>
+{
+  return res.status(404).json({"msg":"error",error:error})
+})
+
+
+}
+
+
+// get subject
+exports.getsubject=(req,res)=>
+{
+  var institution=req.params.instu_id;
+  var regulation=req.params.regu_id;
+  var departement=req.params.dep_id;
+  console.log(institution,regulation,departement);
+
+Regulation.find(
+    {      
+                              Institution_id: institution
+                              ,
+                                Regulation:
+                                    {
+                                      $elemMatch:
+                                                  {                              
+                                                    "Regulation_ID":regulation,
+                                                    "Department_Details.Department_ID":departement                                      
+                                                                        
+                                                                    
+                                                  }
+                                    }   
+    }
+    ,
+    {
+      Regulation:
+      {
+        $elemMatch:
+                    {
+                      "Regulation_ID":regulation,
+                        "Department_Details":
+                                              {
+
+                                                $elemMatch:
+                                                {
+                                                  "Department_ID":departement
+                                                }
+                                              }                   
+                    }
+      }
+    }  
+  )
+  .then((data)=>
+    {
+      
+      if(data.length)
+      {
+        var Subject;
+        data[0].Regulation[0].Department_Details.map(x=>{
+              if(x.Department_ID==departement)
+              {
+                Subject=x.Subject;
+              }
+        })
+        console.log(Subject)
+        return res.status(200).json({msg:"sucess",data:Subject})
+      }
+      return res.status(200).json({msg:"Institution/Regulation/Department/Subject not found",data:data})
+    }
+  )
+  .
+  catch((error)=>
+  {
+    console.log("erro");
+    return res.status(404).json({"msg":"error",error:error})
+  })
+
+
+
+}
+
+//edit subject
+exports.editsubject=(req,res)=>
+{
+ var Payload=req.body;
+ var institution=req.params.instu_id;
+ var regulation=req.params.regu_id;
+ var departement=req.params.dep_id;
+ var subject=req.params.subject_id;
+ console.log(institution,regulation,departement,subject);
+
+
+ //change find to update
+ 
+Regulation.updateOne(
+
+  {
+      Institution_id:institution,
+      // 1.
+      // "Regulation":
+      // {
+        Regulation:{
+                         $elemMatch:
+                                {
+                                  Regulation_ID:regulation,
+                                  Department_Details:
+                                                    {
+                                                      $elemMatch:
+                                                      {
+                                                        Department_ID:departement
+                                                      },
+                                                      // 1.
+                                                          //  "Subject.Subject_ID":subject                          
+                                                      
+
+
+                                                    }
+
+
+                                }
+                    }
+        
+      // }
+  },
+  {
+    $set:
+          {
+            "Regulation.$[i].Department_Details.$[j].Subject.$":Payload
+          }
+  },
+  {
+
+    "arrayFilters":
+    [
+       
+        {
+          "i.Regulation_ID":regulation
+        },
+        {
+            "j.Department_ID":departement
+        },
+        {
+          "Subject.Subject_ID":subject
+        }
+    ]
+
+  }
+  
+)
+.then((data)=>
+{
+  return res.status(200).json({msg:"sucess",data:data})
+})
+.catch((error)=>
+{
+  return res.status(404).json({"msg":"error",error:error})
+})
+
+
 }

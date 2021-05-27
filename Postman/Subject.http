@@ -108,3 +108,37 @@ Content-Type: application/json
     }
 
 ]
+
+
+###
+# --------------------------------------------------------updated design----------------------------------------------------------------------------
+
+Post   http://localhost:3000/Subject/addsubject/IN0010/R2/IT
+Content-Type: application/json
+
+[
+{
+
+  "Subject_ID":"03",
+  "Subject_Name":"Visualization",
+  "isActive":true,
+  "Type":"OE",
+  "Credit":4
+}
+]
+###
+
+get http://localhost:3000/Subject/getsubject/IN0010/R1/AI
+
+###
+PUT http://localhost:3000/Subject/editsubject/IN0010/R1/AI/02
+Content-Type: application/json
+
+ {
+
+      "Subject_ID": "02",
+      "Subject_Name": "Data Control",
+      "isActive": true,
+      "Type": "OE",
+      "Credit": 2
+}

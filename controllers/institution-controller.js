@@ -1,4 +1,5 @@
 const Institution = require("../models/institution-model");
+const Regulation = require("../models/Regulation");
 const University = require("../models/university-model");
 
 async function getInstitution(req, res) {
@@ -156,7 +157,7 @@ function addQuota(req,res)
   var payload=req.body;
   console.log(payload.CourseDetails[0]);
 
-  Institution.updateOne(
+  Regulation.updateOne(
   {
     Institution_id:req.params.id,
     "courseDetails.Course_id":payload.CourseDetails[0].Course_id

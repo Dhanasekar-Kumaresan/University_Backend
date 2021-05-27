@@ -1,7 +1,34 @@
 const express=require("express")
 const router=express.Router()
 const {check}=require("express-validator")
-var {GetSubject,NewSubject,UpdateSubject,GetSubjectByID,Delete_Subject,MultipleSubejct}=require("../controllers/SubjectController")
+var {GetSubject,NewSubject,UpdateSubject,GetSubjectByID,Delete_Subject,MultipleSubejct,
+
+    addsubject,
+    getsubject,
+    editsubject
+}=require("../controllers/SubjectController")
+
+
+
+
+
+
+
+
+
+// ----------------------update  design-------------------------------------------------
+
+router.post("/addsubject/:instu_id/:regu_id/:dep_id",addsubject);
+router.get("/getsubject/:instu_id/:regu_id/:dep_id",getsubject);
+router.put("/editsubject/:instu_id/:regu_id/:dep_id/:subject_id",editsubject);
+
+
+
+
+
+
+
+
 
 
 
@@ -29,6 +56,20 @@ router.post("/MultipleSubject",MultipleSubejct);
 router.delete("/Delete_Subject/:id",Delete_Subject);
 
 //get Subjects according to semester
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports=router;
