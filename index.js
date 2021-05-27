@@ -16,6 +16,9 @@ mongoose.connect(process.env.DATABASE_URL_UNIVERSITY, {
 
 
 const app=express()
+
+const port = process.env.PORT  //for testing
+
 app.use(express.urlencoded());
   app.use(express.json())
 app.use(cors());
@@ -29,12 +32,14 @@ const departmentRouter=require("./routes/department-router")
 
 const Course_Routes=require("./routes/CourseRoutes")
 const Semester_Routes=require("./routes/Semester")
+const SubjectSkeletons_Routes = require("./routes/SubjectSkeletons-router")
 
 
 app.use("/university",universityRouter)
 app.use("/student",studentRouter)
 app.use("/institute",institutionRouter)
 app.use("/departments",departmentRouter)
+app.use("/subjectSkeletons",SubjectSkeletons_Routes)
 
 
 
@@ -83,5 +88,6 @@ app.use("/Semester",Semester_Routes)
 app.use("/curriculum",Curriculum_Routes)
 
 app.listen(process.env.PORT,()=>{
-    console.log("server started");
+  // console.log("server started ");
+    console.log("server started on port ",port); //for testing
 })
