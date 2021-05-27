@@ -126,9 +126,7 @@ Content-Type: application/json
   "Credit":4
 }
 ]
-###
 
-get http://localhost:3000/Subject/getsubject/IN0010/R1/AI
 
 ###
 PUT http://localhost:3000/Subject/editsubject/IN0010/R1/AI/02
@@ -142,3 +140,10 @@ Content-Type: application/json
       "Type": "OE",
       "Credit": 2
 }
+
+###
+
+GET http://localhost:3000/Subject/getsubjectbyid/IN0010/R1/IT/01
+
+###
+GET http://localhost:3000/Subject/getsubject/IN0010/R1/AI

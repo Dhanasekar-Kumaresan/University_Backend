@@ -209,6 +209,76 @@ exports.addsubject=(req,res)=>
 
 
 // get subject
+// exports.getsubject=(req,res)=>
+// {
+//   var institution=req.params.instu_id;
+//   var regulation=req.params.regu_id;
+//   var departement=req.params.dep_id;
+//   console.log(institution,regulation,departement);
+
+// Regulation.find(
+//     {      
+//                               Institution_id: institution
+//                               ,
+//                                 Regulation:
+//                                     {
+//                                       $elemMatch:
+//                                                   {                              
+//                                                     "Regulation_ID":regulation,
+//                                                     "Department_Details.Department_ID":departement                                      
+                                                                        
+                                                                    
+//                                                   }
+//                                     }   
+//     }
+//     ,
+//     {
+//       Regulation:
+//       {
+//         $elemMatch:
+//                     {
+//                       "Regulation_ID":regulation,
+//                         "Department_Details":
+//                                               {
+
+//                                                 $elemMatch:
+//                                                 {
+//                                                   "Department_ID":departement
+//                                                 }
+//                                               }                   
+//                     }
+//       }
+//     }  
+//   )
+//   .then((data)=>
+//     {
+      
+//       if(data.length)
+//       {
+//         var Subject;
+//         data[0].Regulation[0].Department_Details.map(x=>{
+//               if(x.Department_ID==departement)
+//               {
+//                 Subject=x.Subject;
+//               }
+//         })
+//         console.log(Subject)
+//         return res.status(200).json({msg:"sucess",data:Subject})
+//       }
+//       return res.status(200).json({msg:"Institution/Regulation/Department/Subject not found",data:data})
+//     }
+//   )
+//   .
+//   catch((error)=>
+//   {
+//     console.log("erro");
+//     return res.status(404).json({"msg":"error",error:error})
+//   })
+
+
+
+// }
+
 exports.getsubject=(req,res)=>
 {
   var institution=req.params.instu_id;
@@ -216,57 +286,27 @@ exports.getsubject=(req,res)=>
   var departement=req.params.dep_id;
   console.log(institution,regulation,departement);
 
-Regulation.find(
-    {      
-                              Institution_id: institution
-                              ,
-                                Regulation:
-                                    {
-                                      $elemMatch:
-                                                  {                              
-                                                    "Regulation_ID":regulation,
-                                                    "Department_Details.Department_ID":departement                                      
-                                                                        
-                                                                    
-                                                  }
-                                    }   
-    }
-    ,
+Regulation.aggregate(
+   [{
+    $unwind:"$Regulation"
+  }
+  ,
+  {
+    $unwind:"$Regulation.Department_Details"
+  },
+  {
+    $match:
     {
-      Regulation:
-      {
-        $elemMatch:
-                    {
-                      "Regulation_ID":regulation,
-                        "Department_Details":
-                                              {
-
-                                                $elemMatch:
-                                                {
-                                                  "Department_ID":departement
-                                                }
-                                              }                   
-                    }
-      }
-    }  
+      "Regulation.Regulation_ID":regulation,
+      "Regulation.Department_Details.Department_ID":departement
+    }
+  }
+   ]
   )
   .then((data)=>
-    {
-      
-      if(data.length)
-      {
-        var Subject;
-        data[0].Regulation[0].Department_Details.map(x=>{
-              if(x.Department_ID==departement)
-              {
-                Subject=x.Subject;
-              }
-        })
-        console.log(Subject)
-        return res.status(200).json({msg:"sucess",data:Subject})
-      }
-      return res.status(200).json({msg:"Institution/Regulation/Department/Subject not found",data:data})
-    }
+  {
+    return res.status(200).json({msg:"sucess",data:data})
+  }
   )
   .
   catch((error)=>
@@ -278,6 +318,27 @@ Regulation.find(
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //edit subject
 exports.editsubject=(req,res)=>
@@ -357,4 +418,49 @@ Regulation.updateOne(
 })
 
 
+}
+
+// get subject based on subject code
+exports.getsubjectbyid=(req,res)=>
+{
+  var institution=req.params.instu_id;
+ var regulation=req.params.regu_id;
+ var departement=req.params.dep_id;
+ var subject=req.params.subject_id;
+ console.log(institution,regulation,departement,subject);
+
+ Regulation.aggregate(
+   [
+{
+  $unwind:"$Regulation"
+}
+,
+{
+  $unwind:"$Regulation.Department_Details"
+}
+,
+{
+  $unwind:"$Regulation.Department_Details.Subject"
+}
+,
+{
+  $match:
+  {
+    "Regulation.Regulation_ID":regulation,
+    "Regulation.Department_Details.Department_ID":departement,
+    "Regulation.Department_Details.Subject.Subject_ID":subject
+  }
+}
+
+]
+
+ )
+ .then((data)=>
+ {
+  return res.status(200).json({msg:"sucess",data:data})
+ })
+ .catch((error)=>
+ {
+  return res.status(404).json({"msg":"error",error:error})
+ })
 }

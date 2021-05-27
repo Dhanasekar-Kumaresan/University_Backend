@@ -252,4 +252,4 @@ get http://localhost:3000/Regulation/getregulation
 get http://localhost:3000/Regulation/getregulation/IN0010
 
 ###
-get http://localhost:3000/Regulation/getdepartmentdetailsbyid/IN0010/R2
+get http://localhost:3000/Regulation/getdepartmentdetailsbyid/IN0010/R1
