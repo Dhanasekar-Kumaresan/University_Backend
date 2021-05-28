@@ -18,6 +18,41 @@ async function getInstitution(req, res) {
     });
   }
 }
+async function getInstitutionById(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    return res.status(200).json({ success: true, data: institution });
+  } catch {
+    return res.status(400).json({
+      success: false,
+      message: "Unknown error in fetching Institution!!! Contact Admin",
+    });
+  }
+}
+
+async function getCourseById(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.id},
+      {courseDetails:{$elemMatch: {Course_id : req.params.Courseid} }}
+      );
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    return res.status(200).json({ success: true, data: institution });
+  } catch {
+    return res.status(400).json({
+      success: false,
+      message: "Unknown error in fetching Institution!!! Contact Admin",
+    });
+  }
+}
 async function addInstitution(req, res) {
   let body = req.body;
   if (!body) {
@@ -193,5 +228,7 @@ function addQuota(req,res)
 module.exports = {
   getInstitution,
   addInstitution,
-  addQuota
+  addQuota,
+  getInstitutionById,
+  getCourseById
 };
