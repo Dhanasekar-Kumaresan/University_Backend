@@ -33,6 +33,7 @@ const departmentRouter=require("./routes/department-router")
 const Course_Routes=require("./routes/CourseRoutes")
 const Semester_Routes=require("./routes/Semester")
 const SubjectSkeletons_Routes = require("./routes/SubjectSkeletons-router")
+const subjectFacultyRoute=require("./routes/SubjectFacultyRoutes")
 
 
 app.use("/university",universityRouter)
@@ -40,6 +41,8 @@ app.use("/student",studentRouter)
 app.use("/institute",institutionRouter)
 app.use("/departments",departmentRouter)
 app.use("/subjectSkeletons",SubjectSkeletons_Routes)
+app.use("/subjectFaculty",subjectFacultyRoute)
+
 
 
 
