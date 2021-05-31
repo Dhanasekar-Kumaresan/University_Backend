@@ -46,6 +46,10 @@ const SubjectFaculty = new mongoose.Schema({
         type:String,
         required:true
     },
+    regulationID:{
+        type:String,
+        required:true
+    },
     downloadFlag:{
         type:String,
         default: 'true'
