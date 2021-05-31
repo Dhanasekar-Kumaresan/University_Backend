@@ -3,11 +3,11 @@ const router=express.Router();
 const {check}=require("express-validator");
 
 
-const {newcurriculum}=require("../controllers/CurriculumController");
+const {newcurriculum,getcurriculum}=require("../controllers/CurriculumController");
 
-router.post("/newcurriculum",newcurriculum);
+router.post("/newcurriculum/:instu_id/:regu_id/:dep_id",newcurriculum);
 
-
+router.get("/getcurriculum/:instu_id/:regu_id/:dep_id/:batch_year",getcurriculum);
 
 
 module.exports=router;

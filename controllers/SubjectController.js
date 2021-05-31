@@ -305,7 +305,9 @@ Regulation.aggregate(
   )
   .then((data)=>
   {
-    return res.status(200).json({msg:"sucess",data:data})
+    //need to work on service itself
+    console.log(data[0].Regulation.Department_Details.Subject);
+    return res.status(200).json({msg:"sucess",data:data[0].Regulation.Department_Details.Subject})
   }
   )
   .
@@ -457,7 +459,9 @@ exports.getsubjectbyid=(req,res)=>
  )
  .then((data)=>
  {
-  return res.status(200).json({msg:"sucess",data:data})
+   //need to work on service itself
+   console.log(data[0].Regulation.Department_Details.Subject);
+  return res.status(200).json({msg:"sucess",data:data[0].Regulation.Department_Details.Subject})
  })
  .catch((error)=>
  {

@@ -113,13 +113,13 @@ Content-Type: application/json
 ###
 # --------------------------------------------------------updated design----------------------------------------------------------------------------
 
-Post   http://localhost:3000/Subject/addsubject/IN0010/R2/IT
+Post   http://localhost:3000/Subject/addsubject/IN0010/R1/CR0001
 Content-Type: application/json
 
 [
 {
 
-  "Subject_ID":"03",
+  "Subject_ID":"01",
   "Subject_Name":"Visualization",
   "isActive":true,
   "Type":"OE",
@@ -143,7 +143,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/Subject/getsubjectbyid/IN0010/R1/IT/01
+GET http://localhost:3000/Subject/getsubjectbyid/IN0010/R1/CR0001/01
 
 ###
-GET http://localhost:3000/Subject/getsubject/IN0010/R1/AI
+GET http://localhost:3000/Subject/getsubject/IN0010/R1/CR0001

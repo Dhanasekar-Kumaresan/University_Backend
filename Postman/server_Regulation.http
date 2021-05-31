@@ -169,9 +169,9 @@ Content-Type: application/json
 [
     {
     "Active":true,
-    "Regulation_ID":"R2",
-    "Regulation_Name":"R2",
-    "Academic_Year":[2020],
+    "Regulation_ID":"R1",
+    "Regulation_Name":"R1",
+    "Academic_Year":[2016,2020],
     "Grading":
         {
         "GradeType":"Points",
@@ -212,22 +212,8 @@ Content-Type: application/json
 },
 "Department_Details":[
 {
-    "Department_ID":"AI",
-    "Department_Name":"artificial intelligence",
-    "Total_Credit":15,
-    "Semester_Count":3,
-    "Credits_Details":
-    [
-        { "sNo": 1, "Core": 4, "OE": 4, "PE": 4 },
-    { "sNo": 2, "Core": 4, "OE": 4, "PE": 4 },
-    { "sNo": 3, "Core": 4, "OE": 4, "PE": 4 }   
-
-    ]
-
-},
-{
-    "Department_ID":"IT",
-    "Department_Name":"Informaton Technology",
+    "Department_ID":"CR0001",
+    "Department_Name":"Information Technology",
     "Total_Credit":15,
     "Semester_Count":3,
     "Credits_Details":
@@ -239,8 +225,8 @@ Content-Type: application/json
     ]
 
 }
-]
-}
+                ]
+        }
 ]  
 }
 
