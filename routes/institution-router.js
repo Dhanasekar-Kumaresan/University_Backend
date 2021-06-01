@@ -11,5 +11,6 @@ institutionRouter.put('/quota/:id',institutionCtrl.addQuota)
 
 institutionRouter.get('/courses/:id',institutionCtrl.getCourseList)
 institutionRouter.get('/branchList/:id/:course',institutionCtrl.getDepartmentList)
+institutionRouter.get('/subjects/:reg_id/:dep_id/:cur_no/:sem_no',institutionCtrl.getSubjectList)
 
 module.exports=institutionRouter

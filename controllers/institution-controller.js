@@ -266,6 +266,45 @@ async function getDepartmentList(req, res) {
   }
 }
 
+//GET for fetching Subjects
+async function getSubjectList(req, res) {
+  try {
+    let subjectData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details"
+     },
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
+     },
+     {$match:{"Regulation.Regulation_ID":req.params.reg_id,
+       "Regulation.Department_Details.Department_ID":req.params.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no,
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.params.sem_no)
+     }}
+     
+     
+     ])
+   //console.log(subjectData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data);
+   
+   return res.status(200).json({msg:"sucess",data:subjectData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data})
+    
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
 
 module.exports = {
   getInstitution,
@@ -274,5 +313,6 @@ module.exports = {
   getInstitutionById,
   getCourseById,
   getCourseList,
-  getDepartmentList
+  getDepartmentList,
+  getSubjectList
 };

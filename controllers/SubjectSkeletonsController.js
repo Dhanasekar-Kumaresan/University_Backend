@@ -28,7 +28,7 @@ async function getSubjectSkeletonByDefaults(res,res){
 
 }
 
-async function addSubjectSkeleton(req,res){
+async function addSubjectSkeletonToInstitution(req,res){
     var institution=req.params.ins_id;
     var regulation=req.params.reg_id;
     try{
@@ -59,5 +59,5 @@ async function addSubjectSkeleton(req,res){
 module.exports={
     createSubjectSkeletons,
     getSubjectSkeletonByDefaults,
-    addSubjectSkeleton
+    addSubjectSkeletonToInstitution
 }
