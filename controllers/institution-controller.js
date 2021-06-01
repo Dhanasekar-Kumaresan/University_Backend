@@ -218,11 +218,53 @@ function addQuota(req,res)
 
   
 }
+//GET for Course list [btech, mtech, mca]
+async function getCourseList(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let courseSet = new Set();
+    institution[0].courseDetails.forEach((input)=>{
+      courseSet.add(input.Course_type);
+    });
+    return res.status(200).json(Array.from(courseSet));}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
 
-
-
-
-
+//GET for fetching Departments for an Institution
+async function getDepartmentList(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let deptList = [];
+    let name = req.params.course;
+    institution[0].courseDetails.forEach((input)=>{
+      if(input.Course_type == name){
+      deptList.push(input.Course_name);}
+    });
+    return res.status(200).json(deptList);}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
 
 
 module.exports = {
@@ -230,5 +272,7 @@ module.exports = {
   addInstitution,
   addQuota,
   getInstitutionById,
-  getCourseById
+  getCourseById,
+  getCourseList,
+  getDepartmentList
 };
