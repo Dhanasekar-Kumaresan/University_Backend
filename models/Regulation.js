@@ -236,7 +236,13 @@ Grading:
   type:GradeSchema,
   required:true
 },
-Department_Details:[Department]
+Department_Details:[Department],
+
+evaluationCriteria:
+{
+  type:Array
+
+}
 
 
 
