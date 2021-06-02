@@ -8,6 +8,7 @@ studentRouter.get('/search/:status?/:text',studentCtrl.searchStudentName)
 studentRouter.get('/filterCourse/:id',studentCtrl.getByStudentCourse)
 studentRouter.get('/filterStatus/:id',studentCtrl.getByStudentStatus)
 studentRouter.put('/update/:id',studentCtrl.modifyStudent)
-studentRouter.post('/add',studentCtrl.addStudent)
+studentRouter.post('/add',studentCtrl.addStudent),
+studentRouter.post('/getStudentMarksData',studentCtrl.getStudentMarks)
 
 module.exports=studentRouter
