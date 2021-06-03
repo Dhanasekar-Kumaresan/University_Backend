@@ -85,11 +85,33 @@ async function getSubjectSkeletonSubjectID(req,res){
 
 }
 
+async function updateSubjectSkeletons(req, res) {
+  var Errors = validationResult(req);
+  if (!Errors.isEmpty()) {
+    console.log("bad request");
+    return res.status(400).json({ errors: Errors.errors });
+  }
+
+  try {
+    const updatedSkeleton = await SubjectSkeletons.findOneAndUpdate({ subject_type: req.params.subject_type }, req.body,{
+      new: true,
+      upsert: true // Make this update into an upsert
+    })
+    return res.status(201).json({ msg: "Subject skeleton updated successfully", data: updatedSkeleton });;
+
+  } catch (e) {
+    return res.status(400).json({ msg: e });
+
+  }
+}
+
+
 
 
 module.exports={
     createSubjectSkeletons,
     getSubjectSkeletonByDefaults,
     addSubjectSkeletonToInstitution,
-    getSubjectSkeletonSubjectID
+    getSubjectSkeletonSubjectID,
+    updateSubjectSkeletons
 }
