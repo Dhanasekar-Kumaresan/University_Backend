@@ -231,16 +231,14 @@ async function getStudentMarks(req, res) {
       let workbook = new excel.Workbook();
       let worksheet = workbook.addWorksheet("excelArray");
   
-      worksheet.columns = [
+      let columnArray = [
         { header: "ID", key: "studentID", width: 10 },
-        { header: "NAME", key: "studentName", width: 25 },
-        { header: "Attendance", key: "Attendance", width: 25 },
-        { header: "Internal Assessment 1", key: "Internal Assessment 1", width: 25 },
-        { header: "Internal Assessment 2", key: "Internal Assessment 2", width: 25 },
-        { header: "Assignment", key: "Assignment", width: 25 },
-        { header: "Final Evaluation", key: "Final Evaluation", width: 25 },
-      ];
-  
+        { header: "NAME", key: "studentName", width: 25 }]
+        for(var k = 0; k<evalCriteria.subject_contributors.length; k++){
+          columnArray.push({ header: evalCriteria.subject_contributors[k].type_of_evaluation, key: evalCriteria.subject_contributors[k].type_of_evaluation, width: 25 });
+      }
+      worksheet.columns = columnArray;
+          console.log(worksheet.columns);
       // Add Array Rows
       worksheet.addRows(excelArray);
   

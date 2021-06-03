@@ -285,7 +285,8 @@ async function getSubjectList(req, res) {
      {
        $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
      },
-     {$match:{"Regulation.Regulation_ID":req.params.reg_id,
+     {$match:{"Institution_id": req.params.ins_id,
+       "Regulation.Regulation_ID":req.params.reg_id,
        "Regulation.Department_Details.Department_ID":req.params.dep_id,
        "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no,
        "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.params.sem_no)
@@ -306,6 +307,49 @@ async function getSubjectList(req, res) {
 }
 
 
+async function getSemesterList(req, res) {
+  try {
+    let semData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details"
+     },
+  
+     {$match:{"Institution_id": req.params.ins_id,
+     "Regulation.Regulation_ID":req.params.reg_id,
+       "Regulation.Department_Details.Department_ID":req.params.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no
+      }},
+      {
+        $project:{"Regulation.Grading":0, "Regulation.evaluationCriteria":0}
+      }
+
+  
+     ]);
+     let sems = semData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data;
+     let semesters = [];
+     for(var i = 0; i<sems.length; i++){
+       semesters.push(sems[i].Semester_NO);
+     }
+   
+   return res.status(200).json({msg:"sucess",semesters})
+    
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
 module.exports = {
   getInstitution,
   addInstitution,
@@ -314,5 +358,6 @@ module.exports = {
   getCourseById,
   getCourseList,
   getDepartmentList,
-  getSubjectList
+  getSubjectList,
+  getSemesterList
 };

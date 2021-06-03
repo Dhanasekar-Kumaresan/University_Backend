@@ -17,7 +17,7 @@ async function createSubjectSkeletons(req,res){
     }
 }
 
-async function getSubjectSkeletonByDefaults(res,res){
+async function getSubjectSkeletonByDefaults(req,res){
 
     try{
      const skeletons = await SubjectSkeletons.find({});
@@ -49,9 +49,40 @@ async function addSubjectSkeletonToInstitution(req,res){
           success: false,
           message: error.message
         });
-      }
+      }  
+}
 
-    
+async function getSubjectSkeletonSubjectID(req,res){
+
+  try{
+    let eval = await Regulation.aggregate(
+      [{
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.evaluationCriteria"
+     }
+     ,
+     {
+       $match:
+       {
+         "Institution_id":req.body.ins_id,
+         "Regulation.Regulation_ID":req.body.reg_id,
+         "Regulation.evaluationCriteria.subject_type":req.body.sub_type,
+         
+       }
+     },
+     {
+       $project:{"Regulation.Grading":0, "Regulation.Department_Details":0}
+     }
+      ]);
+      let finalRes = eval[0].Regulation.evaluationCriteria;
+   return res.status(200).json({ msg: "Success", finalRes})
+  }catch(e){
+      return res.status(400).json({ msg: e });
+  }
+
 }
 
 
@@ -59,5 +90,6 @@ async function addSubjectSkeletonToInstitution(req,res){
 module.exports={
     createSubjectSkeletons,
     getSubjectSkeletonByDefaults,
-    addSubjectSkeletonToInstitution
+    addSubjectSkeletonToInstitution,
+    getSubjectSkeletonSubjectID
 }
