@@ -271,5 +271,5 @@ module.exports={
     modifyStudent,
     getByStudentCourse,
     getByStudentStatus,
-    getStudentMarks,
+    getStudentMarks
 }
