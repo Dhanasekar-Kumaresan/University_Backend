@@ -20,11 +20,11 @@ exports.addFaculty=(req,res)=>{
 }
 
 exports.getFacultyDetails=(req,res)=>
-{
-    SubjectFaculty.findOne({$and:[{institutionID: req.params.ins_id},{courseID: req.params.course_id},{departmentID: req.params.dept_id},{semesterID : req.params.sem_id},{subjectID : req.params.sub_id},{academicYear : req.params.acad_year}]})
+{console.log(req.body.ins_id);
+    SubjectFaculty.findOne({$and:[{institutionID: req.body.ins_id},{courseID: req.body.course_id},{departmentID: req.body.dept_id},{semesterID : req.body.sem_id},{subjectID : req.body.sub_id},{academicYear : req.body.acad_year}]})
     .then((subjectFacultyDetails)=>{
     console.log(subjectFacultyDetails);
-    return res.status(200).json({data: subjectFacultyDetails});
+    return res.status(200).json(subjectFacultyDetails);
     }).catch((e)=>{
         console.log(e);
     return res.status(500).json({error:e});

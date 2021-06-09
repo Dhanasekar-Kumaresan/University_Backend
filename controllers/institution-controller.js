@@ -218,17 +218,146 @@ function addQuota(req,res)
 
   
 }
+//GET for Course list [btech, mtech, mca]
+async function getCourseList(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let courseSet = new Set();
+    institution[0].courseDetails.forEach((input)=>{
+      courseSet.add(input.Course_type);
+    });
+    return res.status(200).json(Array.from(courseSet));}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+//GET for fetching Departments for an Institution
+async function getDepartmentList(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let deptList = [];
+    let name = req.params.course;
+    institution[0].courseDetails.forEach((input)=>{
+      if(input.Course_type == name){
+      deptList.push(input.Course_name);}
+    });
+    return res.status(200).json(deptList);}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+//GET for fetching Subjects
+async function getSubjectList(req, res) {
+  try {
+    let subjectData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details"
+     },
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
+     },
+     {$match:{"Institution_id": req.params.ins_id,
+       "Regulation.Regulation_ID":req.params.reg_id,
+       "Regulation.Department_Details.Department_ID":req.params.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no,
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.params.sem_no)
+     }}
+     
+     
+     ])
+   //console.log(subjectData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data);
+   
+   return res.status(200).json({msg:"sucess",data:subjectData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data})
+    
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
 
 
+async function getSemesterList(req, res) {
+  try {
+    let semData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details"
+     },
+  
+     {$match:{"Institution_id": req.params.ins_id,
+     "Regulation.Regulation_ID":req.params.reg_id,
+       "Regulation.Department_Details.Department_ID":req.params.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no
+      }},
+      {
+        $project:{"Regulation.Grading":0, "Regulation.evaluationCriteria":0}
+      }
 
-
-
-
+  
+     ]);
+     let sems = semData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data;
+     let semesters = [];
+     for(var i = 0; i<sems.length; i++){
+       semesters.push(sems[i].Semester_NO);
+     }
+   
+   return res.status(200).json({msg:"sucess",semesters})
+    
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
 
 module.exports = {
   getInstitution,
   addInstitution,
   addQuota,
   getInstitutionById,
-  getCourseById
+  getCourseById,
+  getCourseList,
+  getDepartmentList,
+  getSubjectList,
+  getSemesterList
 };
