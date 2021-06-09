@@ -113,17 +113,51 @@ Content-Type: application/json
 ###
 # --------------------------------------------------------updated design----------------------------------------------------------------------------
 
-Post   http://localhost:3000/Subject/addsubject/IN0010/R1/CR0001
+Post   http://localhost:3000/Subject/addsubject/IN0010/R2/CR0005
 Content-Type: application/json
 
 [
 {
 
-  "Subject_ID":"01",
-  "Subject_Name":"Visualization",
+  "Subject_ID":"02",
+  "Subject_Name":"C Basic",
+  "isActive":true,
+  "Type":"Core",
+  "Credit":4
+},
+{
+
+  "Subject_ID":"03",
+  "Subject_Name":"Engineer Drawing",
+  "isActive":true,
+  "Type":"PE",
+  "Credit":2
+},
+{
+
+  "Subject_ID":"03",
+  "Subject_Name":"Engineer Graphics",
+  "isActive":true,
+  "Type":"PE",
+  "Credit":2
+}
+,
+{
+
+  "Subject_ID":"04",
+  "Subject_Name":"Thermodynamics",
+  "isActive":true,
+  "Type":"Core",
+  "Credit":4
+}
+,
+{
+
+  "Subject_ID":"05",
+  "Subject_Name":"Fluid Mechanics",
   "isActive":true,
   "Type":"OE",
-  "Credit":4
+  "Credit":2
 }
 ]
 

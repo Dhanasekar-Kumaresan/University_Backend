@@ -181,3 +181,30 @@ exports.getdepartmentdetailsbyid = async (req, res) => {
       return res.status(404).json({ msg: "Regulation/Institution Not Found" });
     });
 };
+
+//delete regulation
+exports.deleteregulation=(req,res)=>
+{
+  // console.log("delete")
+  regulation=req.params.regu_id;
+  instituion=req.params.instu_id;
+  console.log(regulation,instituion)
+
+Regulation.updateOne(
+  {Institution_id: req.params.instu_id},
+  {$pull : {"Regulation" : {"Regulation_ID":regulation}}}
+
+)  .then((data) => {
+  console.log(!data.length);
+  if (data["nModified"]) {
+    return res.status(200).json({"msg": "success",data: data });
+   
+  } else {
+     return res.status(404).json({ error: "Regulation not found" });
+  }
+})
+.catch((error) => {
+  return res.status(404).json({ msg: "Regulation/Institution Not Found" });
+});
+
+}

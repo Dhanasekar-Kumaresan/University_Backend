@@ -169,8 +169,8 @@ Content-Type: application/json
 [
     {
     "Active":true,
-    "Regulation_ID":"R1",
-    "Regulation_Name":"R1",
+    "Regulation_ID":"R2",
+    "Regulation_Name":"R2",
     "Academic_Year":[2016,2020],
     "Grading":
         {
@@ -231,7 +231,7 @@ Content-Type: application/json
 }
 
 
-###
+###""
 get http://localhost:3000/Regulation/getregulation
 
 ###
@@ -239,3 +239,6 @@ get http://localhost:3000/Regulation/getregulation/IN0010
 
 ###
 get http://localhost:3000/Regulation/getdepartmentdetailsbyid/IN0010/R1
+
+###
+PUT http://localhost:3000/Regulation/deleteregulation/IN0010/R2
