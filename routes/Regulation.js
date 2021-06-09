@@ -12,7 +12,7 @@ router.get("/getdepartmentdetailsbyid/:instu_id/:regu_id",getdepartmentdetailsby
 router.get("/getregulation/:id",getregulationbyid);
 router.get("/getregulation",getregulation);
 router.put("/deleteregulation/:instu_id/:regu_id",deleteregulation);
-
+ 
 
 
 
