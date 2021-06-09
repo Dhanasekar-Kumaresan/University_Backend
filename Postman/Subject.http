@@ -181,3 +181,51 @@ GET http://localhost:3000/Subject/getsubjectbyid/IN0010/R1/CR0001/01
 
 ###
 GET http://localhost:3000/Subject/getsubject/IN0010/R1/CR0001
+
+###
+PATCH http://localhost:3000/Subject/saveSkeletonToSubject/IN0010/R1/CR0001/CR02/1/15AI001
+Content-Type : application/json
+
+{
+  "subject_type": "Theory",
+        "total_marks_subject": 100,
+        "passing_percentage": 40,
+        "subject_contributors": [
+            {
+                "sNo": 1,
+                "type_of_evaluation": "Attendance",
+                "total_marks": 10,
+                "individual_contribution": 5
+            },
+            {
+                "sNo": 2,
+                "type_of_evaluation": "Internal Assessment 1",
+                "total_marks": 15,
+                "individual_contribution": 7.5
+            },
+            {
+                "sNo": 3,
+                "type_of_evaluation": "Internal Assessment 2",
+                "total_marks": 15,
+                "individual_contribution": 7.5
+            },
+            {
+                "sNo": 4,
+                "type_of_evaluation": "Assignment",
+                "total_marks": 10,
+                "individual_contribution": 5
+            },
+            {
+                "sNo": 5,
+                "type_of_evaluation": "Final Evaluation",
+                "total_marks": 100,
+                "individual_contribution": 70
+            },
+            {
+                "sNo": 6,
+                "type_of_evaluation": "Custom Evaluation",
+                "total_marks": 10,
+                "individual_contribution": 5
+            }
+        ]
+}
