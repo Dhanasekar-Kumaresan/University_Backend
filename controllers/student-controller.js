@@ -3,6 +3,8 @@ var faker = require('faker');
 const { contentSecurityPolicy } = require("helmet");
 const Regulation = require("../models/Regulation");
 
+
+
 const excel = require("exceljs");
 
 async function getStudent(req,res){
@@ -261,6 +263,7 @@ async function getStudentMarks(req, res) {
   }
 }
 
+
 module.exports={
     getStudent,
     addStudent,
@@ -268,5 +271,5 @@ module.exports={
     modifyStudent,
     getByStudentCourse,
     getByStudentStatus,
-    getStudentMarks
+    getStudentMarks,
 }

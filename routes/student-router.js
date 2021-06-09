@@ -1,5 +1,6 @@
 const express= require('express')
 const studentCtrl=require('../controllers/student-controller')
+const upload = require('../middleware/upload')
 
 const studentRouter=express.Router()
 

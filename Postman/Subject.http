@@ -140,7 +140,7 @@ Content-Type: application/json
       "Type": "OE",
       "Credit": 2
 }
-
+###
 ###
 
 GET http://localhost:3000/Subject/getsubjectbyid/IN0010/R1/CR0001/01

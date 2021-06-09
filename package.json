@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "convert-excel-to-json": "^1.7.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "exceljs": "^4.2.1",
@@ -18,10 +19,13 @@
     "faker": "^5.5.3",
     "helmet": "^4.6.0",
     "install": "^0.13.0",
+    "mongodb": "^3.6.9",
     "mongoose": "^5.11.13",
     "mongoose-double": "0.0.1",
     "mongoose-dynamic-schemas": "^1.2.6",
+    "multer": "^1.4.2",
     "nodemon": "^2.0.7",
-    "npm": "^7.11.2"
+    "npm": "^7.11.2",
+    "read-excel-file": "^5.1.0"
   }
 }
