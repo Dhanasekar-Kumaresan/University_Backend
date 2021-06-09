@@ -25,7 +25,7 @@ const Institutions=new Schema({
         UGC_Reg_ID:{type:String, required:false},
         Course_type:{type:String, required:false},
         Seats:{type:Number, required:false},
-        Quotas:[{
+        Quotas:[            {
             Quota_name:{type:String ,required:true},
             Quota_percentage:{type:String,required:false},
             Quota_allocation:{type:String, required:false}
@@ -36,3 +36,21 @@ const Institutions=new Schema({
 })
 
 module.exports=mongoose.model("institutions",Institutions)  
+
+// //2017
+// counseling
+// isntutuioM:ID
+// [
+// {
+// year:2017
+// department:
+// [    
+// {Seats},
+//     {Quatoes}
+
+// ]
+// }
+// ]
+
+
+//student detauils
