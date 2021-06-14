@@ -221,7 +221,34 @@ function addQuota(req,res)
 
 
 
-
+async function addCourse(req, res) {
+  let body = req.body;
+  console.log(req.params.id)
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      message: "Need a valid input",
+    });
+  }
+  Institution.updateMany(
+    {
+      Institution_id:req.params.id
+    },{
+    $push:
+    {
+      "courseDetails":body
+    }
+  }
+  )
+  .then((data)=>
+  {
+    return res.status(200).json({msg:"Course Updated Successfully", data:data})
+  })
+  .catch((error)=>
+  {
+    return res.status(404).json({msg:"error",error:error})
+  })
+}
 
 
 
@@ -230,5 +257,6 @@ module.exports = {
   addInstitution,
   addQuota,
   getInstitutionById,
-  getCourseById
+  getCourseById,
+  addCourse
 };
