@@ -180,7 +180,7 @@ Content-Type: application/json
 GET http://localhost:3000/Subject/getsubjectbyid/IN0010/R1/CR0001/01
 
 ###
-GET http://localhost:3000/Subject/getsubject/IN0010/R1/CR0001
+GET http://localhost:3000/Subject/getsubject/IN0010/R2/CR0005
 
 ###
 PATCH http://localhost:3000/Subject/saveSkeletonToSubject/IN0010/R1/CR0001/CR02/1/15AI001
