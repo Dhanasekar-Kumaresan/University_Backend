@@ -3,6 +3,8 @@ var faker = require('faker');
 const { contentSecurityPolicy } = require("helmet");
 const Regulation = require("../models/Regulation");
 const SubjectCtrller = require("./SubjectController");
+const Subject = require("../models/Subject");
+
 
 
 
@@ -266,14 +268,20 @@ async function getStudentMarks(req, res) {
 
 async function updateStudentMarks(req, res) {
   var studentMarksData = req.body;
-  // var resSubject = SubjectCtrller.getsubjectbyid(req.params,res);
-  // var subjectPayload = {
-  // sub_id : resSubject.Subject_Code,
-  // sub_name : resSubject.Subject_Name,
-  // sub_type : resSubject.Type,
-  // sub_grade : "",
-  // sub_marks : []
-  // }
+  const subject = await Regulation.find({
+    Institution_id: req.params.ins_id, Regulation: {
+      $elemMatch: {
+        Regulation_ID: req.params.reg_id, Department_Details: {
+          $elemMatch: {
+            Department_ID: req.params.dep_id,
+            Subject: { elemMatch: { Subject_ID: req.params.sub_id } }
+          }
+        }
+      }
+    }
+  });
+
+  console.log("subject is ", subject);
   var subjectPayload = {
     sub_id: "R1IT003",
     sub_name: "Object Oriented Programming",
@@ -287,26 +295,23 @@ async function updateStudentMarks(req, res) {
     for (const record of studentMarksData) {
       // const student = await Student.findOne({ college_id: req.params.ins_id, course_id: req.params.dep_id, student_id: record.id });
       const student = await Student.findOne({ student_id: record.id });
-      const { id, name, ...payload } = record;
       if (student) {
-        if (student.marks.length == 0) {
-          const studentupdate = await Student.updateOne({ student_id: record.id },
-            {
-              $push:
-              {
-                marks: {
-                  "semester": req.params.sem_id,
-                  "sgpa": "",
-                  "subjectWise": []
-
-                }
+        var sem_f = false, sub_f = false, sub_marks_f = false;
+        if (student.marks.length != 0) {
+          var sem_data = (student.marks.filter(obj => { return obj.semester == req.params.sem_id }))
+          if (sem_data[0]) {
+            sem_f = true;
+            if (sem_data[0].subjectWise.length != 0) {
+              var sub_data = sem_data[0].subjectWise.filter(obj => { return obj.sub_id == req.params.sub_id })
+              if (sub_data[0]) {
+                sub_f = true;
               }
             }
-          )
+          }
         }
-        const studentSemData = await Student.find({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id } } })
-        if (!studentSemData) {
-          studentSemData = await Student.findOneAndUpdate({ student_id: record.id },
+        const { id, name, ...payload } = record;
+        if (sem_f == false) {
+          var studentSemDataupdate = await Student.findOneAndUpdate({ student_id: record.id },
             {
               $push: {
                 marks: {
@@ -316,52 +321,46 @@ async function updateStudentMarks(req, res) {
                 }
               }
             })
-
+          sem_f = true;
         }
-        console.log(' after adding sem to studentSemData is', studentSemData)
-        const studentSubjectWise = await Student.find({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { sub_id: req.params.sub_id } } } } })
-        console.log('studentSubjectWise is ', studentSubjectWise)
-        if (studentSubjectWise.length == 0) {
-          var studentSubject = Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id } } },
+        if (sem_f == true && sub_f == false) {
+          var studentSubject = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id } } },
             {
               $push: {
-                'marks.$.subjectWise': subjectPayload
+                'marks.$[i].subjectWise': subjectPayload
               }
 
             },
             {
               arrayFilters: [
                 {
-                  'marks.semester': req.params.sem_id
+                  'i.semester': req.params.sem_id
                 }
               ],
-                  upsert: true
+              upsert: true
 
             })
-            console.log('after adding sub details to studentSubjectWise is ', studentSubject)
-
+          sub_f = true;
         }
- 
-       await Student.updateOne({student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { sub_id: req.params.sub_id } } } }},
-        {
-          $push: {
-            'marks.$[i].subjectWise.$.sub_marks': payload
-          }
 
-        },{
+        await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { sub_id: req.params.sub_id } } } } },
+          {
+            $set: {
+              'marks.$[i].subjectWise.$[j].sub_marks': payload
+            }
+
+          }, {
           arrayFilters: [
             {
               'i.semester': req.params.sem_id
             },
             {
-             'subjectWise.sub_id' : req.params.sem_id
+              'j.sub_id': req.params.sub_id
             }
           ],
-              upsert: true
+          upsert: true
 
         })
-        console.log('studentSubjectWise after adding marks is ', studentSubjectWise)
-
 
       } else {
         return res.status(400).json({ success: false, message: "Student is not found" })
@@ -369,7 +368,7 @@ async function updateStudentMarks(req, res) {
       }
 
     }
-    return res.status(200).json({ success: true, message: "marks added successfully" })
+    return res.status(200).json({ success: true, message: "marks updated successfully" })
 
 
   } catch (e) {
