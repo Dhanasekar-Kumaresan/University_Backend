@@ -268,28 +268,33 @@ async function getStudentMarks(req, res) {
 
 async function updateStudentMarks(req, res) {
   var studentMarksData = req.body;
-  const subject = await Regulation.find({
+  const data = await Regulation.find({
     Institution_id: req.params.ins_id, Regulation: {
       $elemMatch: {
         Regulation_ID: req.params.reg_id, Department_Details: {
           $elemMatch: {
-            Department_ID: req.params.dep_id,
-            Subject: { elemMatch: { Subject_ID: req.params.sub_id } }
+            Department_ID: req.params.dep_id, Curriculum_Details: {
+              $elemMatch: {
+                Curriclum_Code: req.params.cur_id, Semester_Data: {
+                  $elemMatch: {
+                    Semester_NO: req.params.sem_id, Subjects: {
+                      $elemMatch: {
+                        Subject_Code: req.params.sub_id
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   });
-
-  console.log("subject is ", subject);
-  var subjectPayload = {
-    sub_id: "R1IT003",
-    sub_name: "Object Oriented Programming",
-    sub_type: "CORE",
-    sub_grade: "",
-    sub_marks: []
-  }
-
+  const subject = data[0].Regulation[0].Department_Details[0].Curriculum_Details[0].Semester_Data[0].Subjects[0];
+  const subjectPayload = (({ Subject_Code, Subject_Name,Type }) => ({ Subject_Code, Subject_Name,Type}))(subject);
+  subjectPayload.Subject_Grade = "";
+  subjectPayload.Subject_Marks = [];
   try {
 
     for (const record of studentMarksData) {
@@ -324,6 +329,7 @@ async function updateStudentMarks(req, res) {
           sem_f = true;
         }
         if (sem_f == true && sub_f == false) {
+          console.log('here');
           var studentSubject = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id } } },
             {
               $push: {
