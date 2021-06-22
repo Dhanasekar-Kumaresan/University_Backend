@@ -37,7 +37,7 @@ const Curriculum_Subject=new mongoose.Schema({
       trim:true
   },
   evalCriteria : {
-    type:Array
+    type:Object
 
   }
 

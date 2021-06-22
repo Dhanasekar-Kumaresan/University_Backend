@@ -476,7 +476,7 @@ Regulation.updateOne(
       // }
   },
   {
-    $push:
+    $set:
           {
             "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.evalCriteria" : Payload
           }
@@ -570,4 +570,49 @@ exports.getsubjectbyid=(req,res)=>
  {
   return res.status(404).json({"msg":"error",error:error})
  })
+}
+
+
+//POST to fetch the evalCriteria For a subject
+exports.getSubjectEvalCriteria = async function getSubjectEvalCriteria(req, res) {
+  try {
+    let evalData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details"
+     },
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
+     },
+     {
+      $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
+    },
+     {$match:{"Institution_id": req.body.ins_id,
+       "Regulation.Regulation_ID":req.body.reg_id,
+       "Regulation.Department_Details.Department_ID":req.body.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no,
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.body.sem_no),
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code":req.body.sub_code
+     }}
+     
+     
+     ])
+   //console.log(evalData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria);
+   
+   return res.status(200).json({msg:"sucess",data:evalData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria})
+    
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
 }
