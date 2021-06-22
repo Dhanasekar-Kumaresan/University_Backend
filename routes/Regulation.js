@@ -2,7 +2,12 @@ const express=require("express");
 const router=express.Router();
 const {check}=require("express-validator");
 
-var {New_Regulation,GetRegulation,DeleteRegulation,Update_RegulationById,GetRegulationById,newregulation,getregulation,getregulationbyid,getdepartmentdetailsbyid,deleteregulation}=require("../controllers/RegulationController");
+var {New_Regulation,GetRegulation,
+    DeleteRegulation,Update_RegulationById,
+    GetRegulationById,newregulation,
+    getregulation,getregulationbyid,
+    getdepartmentdetailsbyid,deleteregulation,
+    getRegulationsForInstitution, getRegDepts, getRegDeptCurs} = require("../controllers/RegulationController");
 
 
 
@@ -12,6 +17,12 @@ router.get("/getdepartmentdetailsbyid/:instu_id/:regu_id",getdepartmentdetailsby
 router.get("/getregulation/:id",getregulationbyid);
 router.get("/getregulation",getregulation);
 router.put("/deleteregulation/:instu_id/:regu_id",deleteregulation);
+
+router.post("/all/",getRegulationsForInstitution);
+router.post("/departments/",getRegDepts);
+router.post("/departments/curriculums",getRegDeptCurs);
+
+
 
 
 

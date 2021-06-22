@@ -350,6 +350,33 @@ async function getSemesterList(req, res) {
   }
 }
 
+async function getAllInstitutions(req, res) {
+  try {
+    let institution = await Institution.find({});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+
+    var insArray = [];
+     if(institution){
+        for(var k = 0; k<institution.length; k++){
+          insArray.push({
+            instituteID: institution[k].Institution_id,
+            instituteName: institution[k].Institution_name});
+
+        }
+      }
+    return res.status(200).json({ success: true, insArray });
+  } catch {
+    return res.status(400).json({
+      success: false,
+      message: "Unknown error in fetching Institution!!! Contact Admin",
+    });
+  }
+}
+
 module.exports = {
   getInstitution,
   addInstitution,
@@ -359,5 +386,6 @@ module.exports = {
   getCourseList,
   getDepartmentList,
   getSubjectList,
-  getSemesterList
+  getSemesterList,
+  getAllInstitutions
 };
