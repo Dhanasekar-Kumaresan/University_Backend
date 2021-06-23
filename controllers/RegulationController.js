@@ -260,7 +260,8 @@ exports.getRegDepts = async function getRegDepts(req, res) {
      if(depData){
         //console.log(depData.length);
         for(var k = 0; k<depData.length; k++){
-          depArray.push(depData[k].Regulation.Department_Details.Department_ID);
+          depArray.push({departmentID: depData[k].Regulation.Department_Details.Department_ID,
+          departmentName: depData[k].Regulation.Department_Details.Department_Name});
 
         }
       }
