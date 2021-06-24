@@ -1,8 +1,4 @@
 const mongoose=require("mongoose")
-
-
-
-
 const Curriculum_Subject=new mongoose.Schema({
   Subject_Code:
   {
@@ -39,7 +35,12 @@ const Curriculum_Subject=new mongoose.Schema({
   { 
       type:String,
       trim:true
+  },
+  evalCriteria : {
+    type:Object
+
   }
+
   
   })
   

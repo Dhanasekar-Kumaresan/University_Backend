@@ -27,6 +27,20 @@ async function getSubjectSkeletonByDefaults(req,res){
     }
 
 }
+async function getSubjectSkeletonByType(req,res){
+
+  try{
+   var skeleton = await SubjectSkeletons.find({subject_type: req.body.subject_type});
+   if(!skeleton.length){
+    return res.status(200).json({msg: "Couldn't find data for the requested subject_type"})
+   }
+   return res.status(200).json({ msg: "Success", skeleton })
+   
+  }catch(e){
+      return res.status(400).json({ msg: e });
+  }
+
+}
 
 async function addSubjectSkeletonToInstitution(req,res){
     var institution=req.params.ins_id;
@@ -113,5 +127,6 @@ module.exports={
     getSubjectSkeletonByDefaults,
     addSubjectSkeletonToInstitution,
     getSubjectSkeletonSubjectID,
-    updateSubjectSkeletons
+    updateSubjectSkeletons,
+    getSubjectSkeletonByType
 }

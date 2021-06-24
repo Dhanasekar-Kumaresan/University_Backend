@@ -1,7 +1,6 @@
 const { Schema } = require("mongoose")
 const mongoose=require("mongoose")
 
-
 const Subject=new mongoose.Schema({
 Subject_Code:
 {
@@ -39,7 +38,6 @@ Group_Name:
     type:String,
     trim:true
 }
-
 })
 
 const Semester_Details=new mongoose.Schema({
