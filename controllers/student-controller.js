@@ -307,7 +307,7 @@ async function updateStudentMarks(req, res) {
           if (sem_data[0]) {
             sem_f = true;
             if (sem_data[0].subjectWise.length != 0) {
-              var sub_data = sem_data[0].subjectWise.filter(obj => { return obj.sub_id == req.params.sub_id })
+              var sub_data = sem_data[0].subjectWise.filter(obj => { return obj.Subject_Code == req.params.sub_id })
               if (sub_data[0]) {
                 sub_f = true;
               }
@@ -326,6 +326,7 @@ async function updateStudentMarks(req, res) {
                 }
               }
             })
+            
           sem_f = true;
         }
         if (sem_f == true && sub_f == false) {
@@ -348,11 +349,11 @@ async function updateStudentMarks(req, res) {
             })
           sub_f = true;
         }
-
-        await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { sub_id: req.params.sub_id } } } } },
+        console.log("after updating subject ")
+        var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code : req.params.sub_id } } } } },
           {
             $set: {
-              'marks.$[i].subjectWise.$[j].sub_marks': payload
+              'marks.$[i].subjectWise.$[j].Subject_Marks': payload
             }
 
           }, {
@@ -361,13 +362,13 @@ async function updateStudentMarks(req, res) {
               'i.semester': req.params.sem_id
             },
             {
-              'j.sub_id': req.params.sub_id
+              'j.Subject_Code': req.params.sub_id
             }
           ],
           upsert: true
 
         })
-
+        console.log("after updating marks ",x)
       } else {
         return res.status(400).json({ success: false, message: "Student is not found" })
 
