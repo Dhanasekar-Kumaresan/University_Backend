@@ -166,7 +166,7 @@ async function getStudentMarks(req, res) {
     let students = await Student.find({
       $and: [
         {
-          course_id: req.body.cor_id
+          course_id: req.body.dep_id
         },
         {
           college_id: req.body.ins_id
@@ -182,34 +182,40 @@ async function getStudentMarks(req, res) {
 
     console.log(students);
     let eval = await Regulation.aggregate(
-      [{
-        $unwind: "$Regulation"
-      }
-        ,
-      {
-        $unwind: "$Regulation.evaluationCriteria"
-      }
-        ,
-      {
-        $match:
-        {
-          "Institution_id": req.body.ins_id,
-          "Regulation.Regulation_ID": req.body.reg_id,
-          "Regulation.evaluationCriteria.subject_type": req.body.sub_type,
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details"
+     },
+     {
+       $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
+     },
+     {
+      $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
+    },
+     {$match:{"Institution_id": req.body.ins_id,
+       "Regulation.Regulation_ID":req.body.reg_id,
+       "Regulation.Department_Details.Department_ID":req.body.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no,
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.body.sem_no),
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code":req.body.sub_code
+     }}
+     
+     
+     ]);
 
-        }
-      },
-      {
-        $project: { "Regulation.Grading": 0, "Regulation.Department_Details": 0 }
-      }
-      ]
-    );
 
+    let evalCriteria = eval[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria;
 
-    let evalCriteria = eval[0].Regulation.evaluationCriteria;
-
-    console.log(evalCriteria);
-    if (students[0].marks.length == 0) {
+    //console.log(evalCriteria);
+    if (students[1].marks.length == 0) {
       for (var j = 0; j < students.length; j++) {
         var obj = {
           studentName: students[j].name,
@@ -243,7 +249,7 @@ async function getStudentMarks(req, res) {
       columnArray.push({ header: evalCriteria.subject_contributors[k].type_of_evaluation, key: evalCriteria.subject_contributors[k].type_of_evaluation, width: 25 });
     }
     worksheet.columns = columnArray;
-    console.log(worksheet.columns);
+   // console.log(worksheet.columns);
     // Add Array Rows
     worksheet.addRows(excelArray);
 
