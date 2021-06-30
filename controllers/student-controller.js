@@ -183,33 +183,36 @@ async function getStudentMarks(req, res) {
     console.log(students);
     let eval = await Regulation.aggregate(
       [
-     {
-       $unwind:"$Regulation"
-     }
-     ,
-     {
-       $unwind:"$Regulation.Department_Details"
-     }
-     ,
-     {
-       $unwind:"$Regulation.Department_Details.Curriculum_Details"
-     },
-     {
-       $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
-     },
-     {
-      $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
-    },
-     {$match:{"Institution_id": req.body.ins_id,
-       "Regulation.Regulation_ID":req.body.reg_id,
-       "Regulation.Department_Details.Department_ID":req.body.dep_id,
-       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no,
-       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.body.sem_no),
-       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code":req.body.sub_code
-     }}
-     
-     
-     ]);
+        {
+          $unwind: "$Regulation"
+        }
+        ,
+        {
+          $unwind: "$Regulation.Department_Details"
+        }
+        ,
+        {
+          $unwind: "$Regulation.Department_Details.Curriculum_Details"
+        },
+        {
+          $unwind: "$Regulation.Department_Details.Curriculum_Details.Semester_Data"
+        },
+        {
+          $unwind: "$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
+        },
+        {
+          $match: {
+            "Institution_id": req.body.ins_id,
+            "Regulation.Regulation_ID": req.body.reg_id,
+            "Regulation.Department_Details.Department_ID": req.body.dep_id,
+            "Regulation.Department_Details.Curriculum_Details.Curriclum_Code": req.body.cur_no,
+            "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO": parseInt(req.body.sem_no),
+            "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code": req.body.sub_code
+          }
+        }
+
+
+      ]);
 
 
     let evalCriteria = eval[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria;
@@ -249,7 +252,7 @@ async function getStudentMarks(req, res) {
       columnArray.push({ header: evalCriteria.subject_contributors[k].type_of_evaluation, key: evalCriteria.subject_contributors[k].type_of_evaluation, width: 25 });
     }
     worksheet.columns = columnArray;
-   // console.log(worksheet.columns);
+    // console.log(worksheet.columns);
     // Add Array Rows
     worksheet.addRows(excelArray);
 
@@ -274,32 +277,44 @@ async function getStudentMarks(req, res) {
 
 async function updateStudentMarks(req, res) {
   var studentMarksData = req.body;
-  const data = await Regulation.find({
-    Institution_id: req.params.ins_id, Regulation: {
-      $elemMatch: {
-        Regulation_ID: req.params.reg_id, Department_Details: {
-          $elemMatch: {
-            Department_ID: req.params.dep_id, Curriculum_Details: {
-              $elemMatch: {
-                Curriclum_Code: req.params.cur_id, Semester_Data: {
-                  $elemMatch: {
-                    Semester_NO: req.params.sem_id, Subjects: {
-                      $elemMatch: {
-                        Subject_Code: req.params.sub_id
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+  let data = await Regulation.aggregate(
+    [
+      {
+        $unwind: "$Regulation"
+      }
+      ,
+      {
+        $unwind: "$Regulation.Department_Details"
+      }
+      ,
+      {
+        $unwind: "$Regulation.Department_Details.Curriculum_Details"
+      },
+      {
+        $unwind: "$Regulation.Department_Details.Curriculum_Details.Semester_Data"
+      },
+      {
+        $unwind: "$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
+      },
+      {
+        $match: {
+          "Institution_id": req.params.ins_id,
+          "Regulation.Regulation_ID": req.params.reg_id,
+          "Regulation.Department_Details.Department_ID": req.params.dep_id,
+          "Regulation.Department_Details.Curriculum_Details.Curriclum_Code": req.params.cur_id,
+          "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO": parseInt(req.params.sem_id),
+          "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code": req.params.sub_id
         }
       }
-    }
-  });
-  const subject = data[0].Regulation[0].Department_Details[0].Curriculum_Details[0].Semester_Data[0].Subjects[0];
-  const subjectPayload = (({ Subject_Code, Subject_Name,Type }) => ({ Subject_Code, Subject_Name,Type}))(subject);
+
+
+    ])
+  const subject = data[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects;
+  const evalCriteria = subject.evalCriteria;
+  console.log(evalCriteria);
+  const subjectPayload = (({ Subject_Code, Subject_Name, Type }) => ({ Subject_Code, Subject_Name, Type }))(subject);
   subjectPayload.Subject_Grade = "";
+  subjectPayload.Subject_Percent = "";
   subjectPayload.Subject_Marks = [];
   try {
 
@@ -332,11 +347,10 @@ async function updateStudentMarks(req, res) {
                 }
               }
             })
-            
+
           sem_f = true;
         }
         if (sem_f == true && sub_f == false) {
-          console.log('here');
           var studentSubject = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id } } },
             {
               $push: {
@@ -355,8 +369,7 @@ async function updateStudentMarks(req, res) {
             })
           sub_f = true;
         }
-        console.log("after updating subject ")
-        var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code : req.params.sub_id } } } } },
+        var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code: req.params.sub_id } } } } },
           {
             $set: {
               'marks.$[i].subjectWise.$[j].Subject_Marks': payload
@@ -374,7 +387,70 @@ async function updateStudentMarks(req, res) {
           upsert: true
 
         })
-        console.log("after updating marks ",x)
+        /////////////////////////////////////
+        console.log("code for subject  marks calculation")
+        let marks_for_subjectGrade = 0;
+        for (const key in payload) {
+          if (payload.hasOwnProperty(key)) {
+
+            console.log(`${key}: ${payload[key]}`);
+            if (Object.keys(payload).length == evalCriteria.subject_contributors.length) {
+              const ec = evalCriteria.subject_contributors.filter(obj => { return obj.type_of_evaluation == `${key}` });
+              marks_for_subjectGrade += `${payload[key]}` * ec[0].individual_contribution / ec[0].total_marks;
+            }
+
+          }
+        }
+        if (marks_for_subjectGrade <= evalCriteria.total_marks_subject) {
+          var percent = marks_for_subjectGrade * 100 / evalCriteria.total_marks_subject;
+          console.log("percent is ", percent);
+          var grade = await Regulation.aggregate([
+            {
+              $unwind: "$Regulation"
+            },
+            {
+              $match: {
+                "Institution_id": req.params.ins_id,
+                "Regulation.Regulation_ID": req.params.reg_id,
+              }
+            }
+          ])
+          var gradingCriteria = grade[0].Regulation.Grading.GradingDetails;
+          console.log("grading crteria is ", gradingCriteria);
+          for (let i = 0; i < gradingCriteria.length; i++) {
+            if ((gradingCriteria[i].percentage > percent) && ((i + 1) <= gradingCriteria.length) && (percent >= gradingCriteria[i + 1].percentage)) {
+              Subject_Grade = gradingCriteria[i + 1].grade; break;
+            } else if (percent >= gradingCriteria[i].percentage) {
+              Subject_Grade = gradingCriteria[i].grade; break;
+            } else {
+              Subject_Grade = 'B';
+            }
+          }
+          console.log("Subject_Grade is ", Subject_Grade);
+          var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code: req.params.sub_id } } } } },
+            {
+              $set: {
+                'marks.$[i].subjectWise.$[j].Subject_Grade': Subject_Grade
+              }
+
+            }, {
+            arrayFilters: [
+              {
+                'i.semester': req.params.sem_id
+              },
+              {
+                'j.Subject_Code': req.params.sub_id
+              }
+            ],
+            upsert: true
+
+          })
+        }else{
+          return res.status(400).json({ success: false, message: "total marks of subject exceed evaluation criteria" })
+
+        }
+
+        ////////////////////////////////////
       } else {
         return res.status(400).json({ success: false, message: "Student is not found" })
 
