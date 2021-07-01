@@ -343,6 +343,7 @@ async function updateStudentMarks(req, res) {
                 marks: {
                   "semester": req.params.sem_id,
                   "sgpa": "",
+                  "percentage" : "",
                   "subjectWise": []
                 }
               }
@@ -396,6 +397,10 @@ async function updateStudentMarks(req, res) {
             console.log(`${key}: ${payload[key]}`);
             if (Object.keys(payload).length == evalCriteria.subject_contributors.length) {
               const ec = evalCriteria.subject_contributors.filter(obj => { return obj.type_of_evaluation == `${key}` });
+              if(`${payload[key]}` > ec[0].total_marks ){
+                return res.status(400).json({ success: false, message: `${key} marks should be less than or equal to evaluation criteria marks` })
+
+              }
               marks_for_subjectGrade += `${payload[key]}` * ec[0].individual_contribution / ec[0].total_marks;
             }
 
@@ -430,7 +435,8 @@ async function updateStudentMarks(req, res) {
           var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code: req.params.sub_id } } } } },
             {
               $set: {
-                'marks.$[i].subjectWise.$[j].Subject_Grade': Subject_Grade
+                'marks.$[i].subjectWise.$[j].Subject_Grade': Subject_Grade,
+                'marks.$[i].subjectWise.$[j].Subject_Percent': percent
               }
 
             }, {
@@ -443,6 +449,7 @@ async function updateStudentMarks(req, res) {
               }
             ],
             upsert: true
+
 
           })
         }else{
