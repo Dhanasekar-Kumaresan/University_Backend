@@ -39,6 +39,15 @@ const Curriculum_Subject=new mongoose.Schema({
   evalCriteria : {
     type:Object
 
+  },
+  flag : {
+    type:Boolean,
+    default:false
+
+  },
+  subjectPattern : {
+    type:Object
+
   }
 
   
