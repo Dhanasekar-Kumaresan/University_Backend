@@ -46,7 +46,7 @@ const Curriculum_Subject=new mongoose.Schema({
 
   },
   subjectPattern : {
-    type:Object
+    type:String
 
   }
 
