@@ -208,3 +208,118 @@ Regulation.updateOne(
 });
 
 }
+
+//GET Regulations for a particular institution in array format
+exports.getRegulationsForInstitution = async function getRegulationsForInstitution(req, res) {
+  try {
+    let regData = await Regulation.find({Institution_id:req.body.ins_id});
+    if (!regData.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let regSet = new Set();
+    regData[0].Regulation.forEach((input)=>{
+      regSet.add(input.Regulation_ID);
+    });
+    return res.status(200).json(Array.from(regSet));}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+
+//GET Departments for a particular regulation in an institution in array format
+exports.getRegDepts = async function getRegDepts(req, res) {
+  try {
+    let depData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }
+     ,
+     {$match:{"Institution_id": req.body.ins_id,
+       "Regulation.Regulation_ID":req.body.reg_id
+       }}
+       ,
+      {
+        $project:{"Regulation.Grading":0, "Regulation.evaluationCriteria":0}
+      }
+     
+     
+     ]);
+     var depArray = [];
+     if(depData){
+        //console.log(depData.length);
+        for(var k = 0; k<depData.length; k++){
+          depArray.push({departmentID: depData[k].Regulation.Department_Details.Department_ID,
+          departmentName: depData[k].Regulation.Department_Details.Department_Name});
+
+        }
+      }
+   
+   return res.status(200).json({msg:"sucess",depArray})
+    
+  }  catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+//GET all curriculums for a Department in a particular regulation for an institution in array format
+exports.getRegDeptCurs = async function getRegDeptCurs(req, res) {
+  try {
+    let curData =await Regulation.aggregate(
+      [
+     {
+       $unwind:"$Regulation"
+     }
+     ,
+     {
+       $unwind:"$Regulation.Department_Details"
+     }, 
+     {
+      $unwind:"$Regulation.Department_Details.Curriculum_Details"
+    },
+     
+     {$match:{"Institution_id": req.body.ins_id,
+       "Regulation.Regulation_ID":req.body.reg_id,
+       "Regulation.Department_Details.Department_ID":req.body.dep_id
+       }}
+       ,
+      {
+        $project:{"Regulation.Grading":0, "Regulation.evaluationCriteria":0, "Regulation.Department_Details.Subject":0}
+      }
+     
+     
+     ]);
+     var curArray = [];
+     if(curData){
+        //console.log(curData.length);
+        for(var k = 0; k<curData.length; k++){
+          curArray.push({
+            Curriculum: curData[k].Regulation.Department_Details.Curriculum_Details.Curriclum_Code,
+            BatchYear: curData[k].Regulation.Department_Details.Curriculum_Details.Batch_Year
+          });
+        }
+      }
+   
+   return res.status(200).json({msg:"sucess",curArray})
+    
+  }  catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}

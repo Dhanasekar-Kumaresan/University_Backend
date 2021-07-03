@@ -221,7 +221,7 @@ function addQuota(req,res)
 //GET for Course list [btech, mtech, mca]
 async function getCourseList(req, res) {
   try {
-    let institution = await Institution.find({Institution_id:req.params.id});
+    let institution = await Institution.find({Institution_id:req.body.ins_id});
     if (!institution.length) {
       return res
         .status(200)
@@ -244,7 +244,7 @@ async function getCourseList(req, res) {
 //GET for fetching Departments for an Institution
 async function getDepartmentList(req, res) {
   try {
-    let institution = await Institution.find({Institution_id:req.params.id});
+    let institution = await Institution.find({Institution_id:req.body.ins_id});
     if (!institution.length) {
       return res
         .status(200)
@@ -252,7 +252,7 @@ async function getDepartmentList(req, res) {
     }
     else{
     let deptList = [];
-    let name = req.params.course;
+    let name = req.body.cor_id;
     institution[0].courseDetails.forEach((input)=>{
       if(input.Course_type == name){
       deptList.push(input.Course_name);}
@@ -285,11 +285,11 @@ async function getSubjectList(req, res) {
      {
        $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
      },
-     {$match:{"Institution_id": req.params.ins_id,
-       "Regulation.Regulation_ID":req.params.reg_id,
-       "Regulation.Department_Details.Department_ID":req.params.dep_id,
-       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no,
-       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.params.sem_no)
+     {$match:{"Institution_id": req.body.ins_id,
+       "Regulation.Regulation_ID":req.body.reg_id,
+       "Regulation.Department_Details.Department_ID":req.body.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no,
+       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.body.sem_no)
      }}
      
      
@@ -351,10 +351,10 @@ async function getSemesterList(req, res) {
        $unwind:"$Regulation.Department_Details.Curriculum_Details"
      },
   
-     {$match:{"Institution_id": req.params.ins_id,
-     "Regulation.Regulation_ID":req.params.reg_id,
-       "Regulation.Department_Details.Department_ID":req.params.dep_id,
-       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.params.cur_no
+     {$match:{"Institution_id": req.body.ins_id,
+     "Regulation.Regulation_ID":req.body.reg_id,
+       "Regulation.Department_Details.Department_ID":req.body.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no
       }},
       {
         $project:{"Regulation.Grading":0, "Regulation.evaluationCriteria":0}
@@ -378,6 +378,33 @@ async function getSemesterList(req, res) {
   }
 }
 
+async function getAllInstitutions(req, res) {
+  try {
+    let institution = await Institution.find({});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+
+    var insArray = [];
+     if(institution){
+        for(var k = 0; k<institution.length; k++){
+          insArray.push({
+            instituteID: institution[k].Institution_id,
+            instituteName: institution[k].Institution_name});
+
+        }
+      }
+    return res.status(200).json({ success: true, insArray });
+  } catch {
+    return res.status(400).json({
+      success: false,
+      message: "Unknown error in fetching Institution!!! Contact Admin",
+    });
+  }
+}
+
 module.exports = {
   getInstitution,
   addInstitution,
@@ -388,5 +415,6 @@ module.exports = {
   getCourseList,
   getDepartmentList,
   getSubjectList,
-  getSemesterList
+  getSemesterList,
+  getAllInstitutions
 };

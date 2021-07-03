@@ -10,9 +10,10 @@ institutionRouter.post('/add',institutionCtrl.addInstitution)
 institutionRouter.put('/quota/:id',institutionCtrl.addQuota)
 institutionRouter.put('/course/:id',institutionCtrl.addCourse)
 
-institutionRouter.get('/courses/:id',institutionCtrl.getCourseList)
-institutionRouter.get('/branchList/:id/:course',institutionCtrl.getDepartmentList)
-institutionRouter.get('/subjects/:ins_id/:reg_id/:dep_id/:cur_no/:sem_no',institutionCtrl.getSubjectList)
-institutionRouter.get('/semesters/:ins_id/:reg_id/:dep_id/:cur_no',institutionCtrl.getSemesterList)
+institutionRouter.get('/all',institutionCtrl.getAllInstitutions)
+institutionRouter.post('/courses/',institutionCtrl.getCourseList)
+institutionRouter.post('/branchList/',institutionCtrl.getDepartmentList)
+institutionRouter.post('/subjects/',institutionCtrl.getSubjectList)
+institutionRouter.post('/semesters/',institutionCtrl.getSemesterList)
 
 module.exports=institutionRouter
