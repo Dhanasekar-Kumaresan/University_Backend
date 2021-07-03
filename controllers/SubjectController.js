@@ -422,6 +422,109 @@ Regulation.updateOne(
 
 }
 
+
+
+exports.saveSkeletonToSubject=(req,res)=>
+{
+ var Payload=req.body;
+ var institution=req.params.instu_id;
+ var regulation=req.params.regu_id;
+ var departement=req.params.dep_id;
+ var cirriculum = req.params.cirr_id;
+ var sem = req.params.sem_id;
+ var subject=req.params.subject_id; 
+Regulation.updateOne(
+
+  {
+      Institution_id:institution,
+        Regulation:{
+         $elemMatch:
+               {
+              Regulation_ID:regulation,
+              Department_Details:
+                           {
+                           $elemMatch:
+                           {
+                            Department_ID:departement ,
+                            Curriculum_Details : {
+                                                $elemMatch :
+                                                {
+                                                 Curriclum_Code : cirriculum,
+                                                 Semester_Data : 
+                                                              {
+                                                              $elemMatch : 
+                                                              {
+                                                              Semester_NO : sem,
+                                                              Subjects :
+                                                                     {
+                                                                      $elemMatch : 
+                                                                      {
+                                                                       Subject_Code : subject
+                                                                      }
+                                                                     }
+                                                               }
+                                                              }
+                                                }
+                                              }
+                            }
+                           }
+
+
+                  }
+                 }
+        
+      // }
+  },
+  {
+    $push:
+          {
+            "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.evalCriteria" : Payload
+          }
+  },
+  {
+
+    "arrayFilters":
+    [
+       
+        {
+          "i.Regulation_ID":regulation
+        },
+        {
+            "j.Department_ID":departement
+        },
+        {
+          "k.Curriclum_Code" : cirriculum
+        },
+        {
+         "l.Semester_NO" : sem
+        },
+        {
+          "Subjects.Subject_Code":subject
+        }
+    ],
+    upsert: true
+
+  }
+  
+)
+.then((data)=>
+{
+  return res.status(200).json({msg:"sucess",data:data})
+})
+.catch((error)=>
+{
+  console.log('error is ' ,error);
+  return res.status(404).json({"msg":"error",error:error})
+})
+
+
+}
+
+
+
+
+
+
 // get subject based on subject code
 exports.getsubjectbyid=(req,res)=>
 {

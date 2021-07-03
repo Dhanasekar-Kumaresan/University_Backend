@@ -2,7 +2,7 @@ const express=require("express");
 const router=express.Router();
 const {check}=require("express-validator");
 
-var {New_Regulation,GetRegulation,DeleteRegulation,Update_RegulationById,GetRegulationById,newregulation,getregulation,getregulationbyid,getdepartmentdetailsbyid}=require("../controllers/RegulationController");
+var {New_Regulation,GetRegulation,DeleteRegulation,Update_RegulationById,GetRegulationById,newregulation,getregulation,getregulationbyid,getdepartmentdetailsbyid,deleteregulation}=require("../controllers/RegulationController");
 
 
 
@@ -11,6 +11,7 @@ router.post("/newregulation/:id",newregulation);
 router.get("/getdepartmentdetailsbyid/:instu_id/:regu_id",getdepartmentdetailsbyid);
 router.get("/getregulation/:id",getregulationbyid);
 router.get("/getregulation",getregulation);
+router.put("/deleteregulation/:instu_id/:regu_id",deleteregulation);
 
 
 
