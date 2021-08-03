@@ -11,6 +11,7 @@ studentRouter.put('/update/:id',studentCtrl.modifyStudent)
 studentRouter.post('/add',studentCtrl.addStudent),
 studentRouter.post('/getStudentMarksData',studentCtrl.getStudentMarks)
 studentRouter.put('/updateStudentMarks/:ins_id/:reg_id/:dep_id/:cur_id/:sem_id/:sub_id',studentCtrl.updateStudentMarks)
+ studentRouter.patch('/updateStudentSGPA/:stu_id/:sem_id',studentCtrl.updateStudentSgpa);
 
 
 module.exports=studentRouter
