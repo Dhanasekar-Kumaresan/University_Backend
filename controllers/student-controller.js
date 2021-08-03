@@ -230,7 +230,7 @@ async function getStudentMarks(req, res) {
         excelArray.push(obj);
 
       }
-    }
+    } 
 
 
     if (!students) {

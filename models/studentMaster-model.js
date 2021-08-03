@@ -22,3 +22,36 @@ const Student=new Schema({
 })
 
 module.exports=mongoose.model('student',Student) 
+
+
+// {
+//     Instutuion_id:"",
+//     Course:
+//     [
+//         {
+//       course_id:"",
+//       joining_year:
+//       [
+//           2016:
+//           [
+//                 {
+
+//                 },
+//                 {
+
+//                 }
+//           ],
+//           2017:
+//           [
+//                 {
+
+//                 },
+//                 {
+                    
+//                 }
+//           ]
+//       ]
+//         }
+//     ]
+    
+// }
