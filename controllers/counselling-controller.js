@@ -75,28 +75,27 @@ async function addStudent(req, res) {
     fakeData.profilePic = faker.image.avatar();
     fakeData.institution_id = req.params.id;
     fakeData.Course_type = req.params.course_type;
-    fakeData.status = "approved";
+    fakeData.status = "approved"; // need to be approved from ui
+    fakeData.year = new Date().getFullYear();
 
     // fakeData.rank= Math.floor(Math.random() * (10000 - 999)) + 999 ;
     //console.log("Data" , fakeData);
     const studentData = new Student(fakeData);
-    console.log("Data", studentData);
     let student = await studentData.save();
-    console.log("Done", i);
   }
   return res.status(200).json({ msg: "Students added successfully" });
 }
 
 async function rankCalculation(req, res) {
-  // const body = req.body;
-  //console.log(body)
   const student = await Student.find({
     institution_id: req.params.id,
     status: "approved",
-    Course_type: "Mtech",
+    Course_type: req.params.course_type,
   });
-  // console.log(student.length)
-
+  if(!student)
+  {
+    return res.status(400).json({ msg: "Student data not found for the selected institute & selected course type" });
+  }
   var rank = {};
   for (var i = 0; i < student.length; i++) {
     while (!(randomRank in rank)) {
@@ -109,18 +108,16 @@ async function rankCalculation(req, res) {
     }
     var randomRank = undefined;
   }
-  // console.log(rank);
   seatMatrix = {};
   const course = await Institution.find({ Institution_id: req.params.id });
   course.forEach((element) => {
     for (let i = 0; i < element.courseDetails.length; i++) {
-      if (element.courseDetails[i].Course_type == "Mtech") {
+      if (element.courseDetails[i].Course_type == req.params.course_type) {
         seatMatrix[element.courseDetails[i].Course_id] =
           element.courseDetails[i].Quotas;
       }
     }
   });
-  console.log(seatMatrix);
   for (const students in rank) {
     var flag = false;
     let student_id = rank[students];
@@ -137,9 +134,6 @@ async function rankCalculation(req, res) {
 
       if (parseInt(Quota_allocation[0].Quota_allocation) > 0 && !flag) {
         flag = true;
-        console.log("Coursename", Course_details.Course_name);
-        console.log("Student Id", result[0].student_id);
-        // console.log("Student Details", result[0]);
         const updateStudent = await Student.updateOne(
           { student_id: result[0].student_id },
           {
@@ -150,7 +144,6 @@ async function rankCalculation(req, res) {
           }
         );
         if (updateStudent.ok) {
-          console.log("Student Updated successfully");
           var quotaCount = parseInt(Quota_allocation[0].Quota_allocation) - 1;
           const updatequota = await Institution.updateOne(
             {
@@ -181,7 +174,7 @@ async function rankCalculation(req, res) {
             }
           );
           if (updatequota.ok) {
-            console.log("Quota Updated");
+            // console.log("Quota Updated");
           }
         }
       }

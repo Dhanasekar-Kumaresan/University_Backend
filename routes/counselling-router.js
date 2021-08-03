@@ -7,7 +7,7 @@ const councellingRouter=express.Router()
 
 councellingRouter.get('/view',counsellingCtrl.getStudent)
 councellingRouter.post('/add/:id/:course_type',counsellingCtrl.addStudent)
-councellingRouter.post('/rank/:id',counsellingCtrl.rankCalculation)
+councellingRouter.post('/rank/:id/:course_type',counsellingCtrl.rankCalculation)
 
 
 module.exports=councellingRouter;
