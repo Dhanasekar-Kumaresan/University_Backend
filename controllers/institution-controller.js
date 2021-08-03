@@ -190,13 +190,12 @@ async function addInstitution(req, res) {
 function addQuota(req,res)
 {
   var payload=req.body;
-
-  Regulation.updateOne(
+  console.log(payload ,req.params.id)
+  Institution.updateOne(
   {
     Institution_id:req.params.id,
     "courseDetails.Course_id":payload.Course_id
-  }
-  ,
+  },
   {
     $set:
     {

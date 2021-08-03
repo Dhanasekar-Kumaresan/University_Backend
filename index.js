@@ -27,6 +27,7 @@ app.use(cors());
 
 const universityRouter=require("./routes/university-router")
 const studentRouter=require("./routes/student-router")
+const councellingRouter= require("./routes/counselling-router")
 const institutionRouter=require("./routes/institution-router")
 const departmentRouter=require("./routes/department-router")
 
@@ -42,7 +43,7 @@ app.use("/institute",institutionRouter)
 app.use("/departments",departmentRouter)
 app.use("/subjectSkeletons",SubjectSkeletons_Routes)
 app.use("/subjectFaculty",subjectFacultyRoute)
-
+app.use("/counselling",councellingRouter)
 
 
 

@@ -121,7 +121,6 @@ async function modifyStudent(req, res) {
       });
     }
   }
-
   catch {
     return res.status(400).json({
       success: false,
@@ -130,6 +129,8 @@ async function modifyStudent(req, res) {
     });
   }
 }
+
+
 async function getByStudentCourse(req, res) {
   try {
     let student = await Student.find({ course: req.params.id })
