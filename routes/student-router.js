@@ -5,7 +5,8 @@ const studentRouter=express.Router()
 
 studentRouter.get('/view',studentCtrl.getStudent)
 studentRouter.get('/search/:status?/:text',studentCtrl.searchStudentName)
-studentRouter.get('/filterCourse/:id',studentCtrl.getByStudentCourse)
+studentRouter.get('/filterCourse/:id',studentCtrl.getByInstitute)
+studentRouter.get('/filterCourse/:id/:Course_type',studentCtrl.getByCourseType)
 studentRouter.get('/filterStatus/:id',studentCtrl.getByStudentStatus)
 studentRouter.put('/update/:id',studentCtrl.modifyStudent)
 studentRouter.post('/add',studentCtrl.addStudent),
