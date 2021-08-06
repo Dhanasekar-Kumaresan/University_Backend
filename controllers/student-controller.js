@@ -130,10 +130,41 @@ async function modifyStudent(req, res) {
   }
 }
 
+//get all students based on institution type
 
-async function getByStudentCourse(req, res) {
+async function getByInstitute(req, res) {
   try {
-    let student = await Student.find({ course: req.params.id })
+    let student = await Student.find({ institution_id: req.params.id, year:new Date().getFullYear() })
+    if (!student) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Student entry not found` })
+    }
+    return res.status(200).json({ success: true, data: student })
+  }
+  catch {
+    return res.status(400).json({ success: false, message: "unknown Error in fetching Student detail!! Please Contact admin" })
+  }
+}
+
+async function getByCourseType(req, res) {
+  try {
+    let student = await Student.find({ institution_id: req.params.id, year:new Date().getFullYear() ,Course_type :req.params. Course_type })
+    if (!student) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Student entry not found` })
+    }
+    return res.status(200).json({ success: true, data: student })
+  }
+  catch {
+    return res.status(400).json({ success: false, message: "unknown Error in fetching Student detail!! Please Contact admin" })
+  }
+}
+
+async function getByCourseID(req, res) {
+  try {
+    let student = await Student.find({ institution_id: req.params.id, year:new Date().getFullYear() ,Course_type :req.params.Course_type , Course_id:req.params.Course_id })
     if (!student) {
       return res
         .status(200)
@@ -515,9 +546,11 @@ module.exports = {
   addStudent,
   searchStudentName,
   modifyStudent,
-  getByStudentCourse,
+  getByInstitute,
+  getByCourseType,
   getByStudentStatus,
   getStudentMarks,
   updateStudentMarks,
-  updateStudentSgpa
+  updateStudentSgpa,
+  getByCourseID
 }
