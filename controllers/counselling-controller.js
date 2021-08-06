@@ -144,6 +144,14 @@ async function rankCalculation(req, res) {
           }
         );
         if (updateStudent.ok) {
+           var Course_id=Course_details.Course_id;
+           var Institution_id=req.params.id;
+              //student mapping with core subject
+
+
+
+
+              //quota count updation;
           var quotaCount = parseInt(Quota_allocation[0].Quota_allocation) - 1;
           const updatequota = await Institution.updateOne(
             {
