@@ -95,10 +95,11 @@ exports.DeleteRegulation = (req, res) => {
 
 exports.newregulation = (req, res) => {
   var Payload = req.body;
+  console.log(Payload.Regulation[0].Department_Details);
   Regulation.find({ Institution_id: req.params.id })
     .then((data) => {
       if (!data.length) {
-        console.log("if",Payload)
+        console.log("if")
         var regulation = new Regulation({
           Institution_id: req.params.id,
           Regulation: Payload.Regulation
@@ -110,7 +111,7 @@ exports.newregulation = (req, res) => {
             return res.status(200).json({ msg: "Success", data: data });
           })
           .catch((error) => {
-            return res.status(404).json({ msg: "error", error: error });
+            return res.status(404).json({ msg: "errors", error: error });
           });
       }
       else
