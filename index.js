@@ -60,6 +60,7 @@ const Subject_Routes=require("./routes/Subject")
 
 const Batch_Routes=require("./routes/Batch")
 const Curriculum_Routes=require("./routes/CurriculumRoutes")
+const Student_Routes=require("./routes/StudentRoutes");
 
 //Routes
 app.use("/",routes);
@@ -93,6 +94,10 @@ app.use("/Subject",Subject_Routes);
 
 //Curriculums
 app.use("/curriculum",Curriculum_Routes)
+
+
+//Student
+app.use("/Studentdata",Student_Routes);
 
 app.listen(process.env.PORT,()=>{
   // console.log("server started ");

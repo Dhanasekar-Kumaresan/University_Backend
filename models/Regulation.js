@@ -1,42 +1,36 @@
 const mongoose=require("mongoose")
 const Curriculum_Subject=new mongoose.Schema({
-  Subject_Code:
+  Subject_ID:
   {
       type:String,
-      trim:true,
-      required:true,
-      unique:true
+      trim:true
   },
   Type:
   {
-      type:String,
-      trim:true,
-      required:true
+      type:String, 
+      trim:true
   },
   Subject_Name:
   {
       type:String,
-      trim:true,
-      required:true
+      trim:true
   },
   Description:
   {
       type:String,
-      trim:true,
-      required:true
+      trim:true
   },
   Credits:
   {
       type:Number,
-      trim:true,
-      required:true
+      trim:true
   },
   Group_Name:
   { 
       type:String,
       trim:true
   },
-  evalCriteria : {
+  evalCriteria : { 
     type:Object
 
   },
@@ -47,20 +41,18 @@ const Curriculum_Subject=new mongoose.Schema({
   },
   subjectPattern : {
     type:String
-
+ 
   }
 
   
   })
   
   const Semester_Details=new mongoose.Schema({
-  
+   
   Semester_NO:
   {
       type:Number,
-      trim:true,
-      required:true,
-      unique:true
+      trim:true
   },
   Subjects:[Curriculum_Subject]
   
@@ -74,26 +66,22 @@ const Curriculum_Subject=new mongoose.Schema({
   Curriclum_Code:
   {
       type:String,
-      trim:true,
-      required:true
+      trim:true
   },
   Curriculum_Name:
   {
       type:String,
-      trim:true,
-      required:true
+      trim:true
   },
   Batch_Year:
   {
       type:Number,
-      trim:true,
-      required:true
+      trim:true
   },
   Department_ID:
   {
       type:String,
-      trim:true,
-      required:true
+      trim:true
   },
   Semester_Data:[Semester_Details]
   
@@ -112,32 +100,26 @@ const Subjects=new mongoose.Schema(
       Subject_ID:
       {
           type:String,
-          required:true,
-          unique:true,
           trim:true,   
       }, 
       Subject_Name:
       {
           type:String,
-          required:true,
           trim:true,
       },
       isActive:
       {
-          type:Boolean,
-          required:true,
+          type:Boolean
 
-      },
+      }, 
       Type:
       {
           type:String,
-          required:true,
           trim:true
       },
       Credit:
       { 
-          type:Number,
-          required:true
+          type:Number
       },
 
   }
@@ -156,7 +138,7 @@ const Department=new mongoose.Schema(
     Subject:[Subjects],
     Department_ID:
       {
-        type:String,
+        type:String, 
         required:true,
         trim:true,
       },
@@ -222,17 +204,16 @@ Active:
 
 Regulation_ID: 
 {
-    type:String,
+    type:String, 
     required:true, 
-    trim:true,
+    trim:true
   
 },
 Regulation_Name:
 {
     type:String,
     required:true,
-    trim:true,
-   
+    trim:true
 }
 ,
 Academic_Year:

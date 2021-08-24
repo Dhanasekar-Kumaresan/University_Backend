@@ -75,12 +75,18 @@ const Regulation = require("../models/Regulation");
 exports.newcurriculum=(req,res)=>
 {
     var Payload=req.body;
-    console.log(Payload);
+    console.log(Payload.Department_Details);
     var institution=req.params.instu_id;
     var regulation=req.params.regu_id;
     var departement=req.params.dep_id;
     console.log(institution,regulation,departement);
 
+    var Batch_Year=Payload.Batch_Year;
+
+
+
+
+    
 
     Regulation.updateOne(
         {
@@ -94,8 +100,13 @@ exports.newcurriculum=(req,res)=>
                                                             $elemMatch:
                                                             {
                                                               Department_ID:departement
-                                                             }                                                                        
-                                                          }  
+                                                             } 
+                                                            
+                                                          }
+                                                           
+                                                          
+                                                           
+
                                       }
                           }
         },
@@ -114,7 +125,10 @@ exports.newcurriculum=(req,res)=>
                                   },
                                   {
                                       "j.Department_ID":departement
-                                  },
+                                  }
+                                
+                                 
+                                 
                             ]
         }
     )

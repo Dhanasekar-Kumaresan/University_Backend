@@ -113,7 +113,7 @@ Content-Type: application/json
 ###
 # --------------------------------------------------------updated design----------------------------------------------------------------------------
 
-Post   http://localhost:3000/Subject/addsubject/IN0010/R2/CR0005
+Post   http://localhost:3000/Subject/addsubject/01/R2/
 Content-Type: application/json
 
 [

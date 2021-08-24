@@ -75,7 +75,8 @@ Batch_Year:
 {
     type:Number,
     trim:true,
-    required:true
+    required:true,
+    unique:true
 },
 Department_ID:
 {
