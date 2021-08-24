@@ -75,7 +75,7 @@ async function addStudent(req, res) {
     fakeData.profilePic = faker.image.avatar();
     fakeData.institution_id = req.params.id;
     fakeData.Course_type = req.params.course_type;
-    fakeData.status = "approved"; // need to be approved from ui
+    //fakeData.status = "approved"; // need to be approved from ui
     fakeData.year = new Date().getFullYear();
 
     // fakeData.rank= Math.floor(Math.random() * (10000 - 999)) + 999 ;
