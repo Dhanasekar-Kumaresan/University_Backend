@@ -216,11 +216,23 @@ Regulation_Name:
     trim:true
 }
 ,
-Academic_Year:
+Academic_Start_Year:
 {
-  type:Array,
-  required:true,
+  type:Number,
+  required:true
 },
+Academic_End_Year:
+{
+  type:Number
+},
+
+  Course_Type:
+            {
+              type:String,
+              required:true
+            }
+            ,
+            
 
 Grading:
 {

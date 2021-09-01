@@ -1,7 +1,8 @@
 const Student = require("../models/studentMaster-model");
 const Institution = require("../models/institution-model");
+const Regulation=require("../models/Regulation");
 var faker = require("faker");
-const { contentSecurityPolicy } = require("helmet");
+const { contentSecurityPolicy, crossOriginOpenerPolicy } = require("helmet");
 const { fake } = require("faker");
 
 async function getStudent(req, res) {
@@ -56,7 +57,7 @@ async function addStudent(req, res) {
     }
     break;
   }
-  for (var i = 0; i < 25; i++) {
+  for (var i = 0; i < 10; i++) {
     fakeData.priority = [];
     //Hardcode the priority course length
     while (fakeData.priority.length != quota.length) {
@@ -206,8 +207,105 @@ async function rankCalculation(req, res) {
   }
   return res.status(200).json({ msg: "Students allocated successfully" });
 }
+
+
+
+
+
+async function studentSubjectmapping(req,res)
+{
+console.log("fun");
+institution_id=req.params.instu_id;
+batch_year=parseInt(req.params.year);
+course_id=req.params.course_id;
+course_type=req.params.course_type;
+console.log(institution_id,typeof(batch_year),course_id);
+
+let student=await Student.find({$and:[{institution_id: institution_id,year:batch_year,Course_id:course_id,Course_type:course_type}]});
+//year:batch_year,Course_id:course_id,Course_type:course_type
+console.log(student);
+
+
+
+
+Regulation.aggregate(
+  [
+    {
+      $unwind:"$Regulation"
+    },
+    {
+      $unwind:"$Regulation.Department_Details"
+    },
+    {
+      $unwind:"$Regulation.Department_Details.Curriculum_Details"
+    },
+    {    
+    $match:
+            {
+              "Institution_id": institution_id,
+              "Regulation.Course_Type":course_type,
+              "Regulation.Academic_Start_Year":{$lte:batch_year},
+              "Regulation.Academic_End_Year":{$gte:batch_year},
+              "Regulation.Department_Details.Department_ID":course_id,
+              "Regulation.Department_Details.Curriculum_Details.Batch_Year":batch_year
+            }
+    },
+    {
+      $project:
+      {
+        "Regulation.Regulation_ID":1,
+        "Regulation.Regulation_Name":1,
+        "Regulation.Course_Type":1,
+      "Regulation.Department_Details.Curriculum_Details":1}
+    }
+  ]
+).
+then((data)=>
+{
+  // data
+   //console.log(data[0]["Regulation"]["Department_Details"]["Curriculum_Details"])
+   Regulation_Id=data[0]["Regulation"]["Regulation_ID"];
+   Curriculum_Id=data[0]["Regulation"]["Department_Details"]["Curriculum_Details"]["Curriclum_Code"]
+   //console.log(Regulation_Id,Curriculum_Id)
+
+   Student.updateMany({$and:[{institution_id: institution_id,year:batch_year,Course_id:course_id,Course_type:course_type}]},
+    {
+      $set:
+      {
+        Regulation_Id:Regulation_Id,
+        Curriculum_Id:Curriculum_Id
+      }
+    }).then((data)=>
+    {
+      return res.status(200).json({ msg: "Students are mapped with Subjects",data:data});
+    }).catch((error)=>
+    {
+      return res.status(400).json({ msg: "error",error:error });
+    })
+
+ // return res.status(200).json({ msg: "Success",data:data});
+}).
+catch(( error )=>
+{
+  return res.status(400).json({ msg: "error",error:error });
+
+})
+}
+
+
 module.exports = {
   getStudent,
   addStudent,
   rankCalculation,
+  studentSubjectmapping
 };
+
+
+
+
+
+// course_Avialablity:
+//   [
+//     MSC,
+//     BSC,
+//   ]

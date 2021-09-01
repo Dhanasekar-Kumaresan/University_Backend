@@ -240,6 +240,36 @@ async function getCourseList(req, res) {
   }
 }
 
+
+////GET for Course list with year {"btech":"4 years", "mtech":"2 years", "mca":"2 years"}
+async function getCourseListWithYear(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.params.instu_id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let courseSet = new Set();
+    let courseYear={}
+    institution[0].courseDetails.forEach((input)=>{
+      courseSet.add(input.Course_type);
+      console.log(input);
+      courseYear[input.Course_type]=input.Course_duration;
+
+    });
+    console.log(courseYear);
+    return res.status(200).json(courseYear);}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+
 //GET for fetching Departments for an Institution
 async function getDepartmentList(req, res) {
   try {
@@ -412,6 +442,7 @@ module.exports = {
   getCourseById,
   addCourse,
   getCourseList,
+  getCourseListWithYear,
   getDepartmentList,
   getSubjectList,
   getSemesterList,

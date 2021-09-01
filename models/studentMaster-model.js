@@ -21,7 +21,9 @@ const Student=new Schema({
     Course_type:{type:String, required:false},
     Course_id:{type:String, required:false},
     allocation_status:{type:String , required:false},
-    year:{type:Number ,required:false}
+    year:{type:Number ,required:false},
+    Regulation_Id:{type:String},
+    Curriculum_Id:{type:String}
 
 })
 

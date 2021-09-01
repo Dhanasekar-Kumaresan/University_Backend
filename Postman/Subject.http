@@ -113,30 +113,30 @@ Content-Type: application/json
 ###
 # --------------------------------------------------------updated design----------------------------------------------------------------------------
 
-Post   http://localhost:3000/Subject/addsubject/01/R2/
+Post   http://localhost:3000/Subject/addsubject/02/I1/IIT001
 Content-Type: application/json
 
 [
 {
 
-  "Subject_ID":"02",
-  "Subject_Name":"C Basic",
+  "Subject_ID":"07",
+  "Subject_Name":"JAVA Basic",
   "isActive":true,
   "Type":"Core",
   "Credit":4
 },
 {
 
-  "Subject_ID":"03",
-  "Subject_Name":"Engineer Drawing",
+  "Subject_ID":"08",
+  "Subject_Name":"Python",
   "isActive":true,
   "Type":"PE",
   "Credit":2
 },
 {
 
-  "Subject_ID":"03",
-  "Subject_Name":"Engineer Graphics",
+  "Subject_ID":"10",
+  "Subject_Name":"SQl",
   "isActive":true,
   "Type":"PE",
   "Credit":2
@@ -144,8 +144,8 @@ Content-Type: application/json
 ,
 {
 
-  "Subject_ID":"04",
-  "Subject_Name":"Thermodynamics",
+  "Subject_ID":"11",
+  "Subject_Name":"Java Script",
   "isActive":true,
   "Type":"Core",
   "Credit":4
@@ -153,8 +153,8 @@ Content-Type: application/json
 ,
 {
 
-  "Subject_ID":"05",
-  "Subject_Name":"Fluid Mechanics",
+  "Subject_ID":"12",
+  "Subject_Name":"Big Data",
   "isActive":true,
   "Type":"OE",
   "Credit":2
