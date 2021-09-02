@@ -7,7 +7,7 @@ studentRouter.get('/view',studentCtrl.getStudent)
 studentRouter.get('/search/:status?/:text',studentCtrl.searchStudentName)
 studentRouter.get('/filterCourse/:id',studentCtrl.getByInstitute)
 studentRouter.get('/filterCourse/:id/:Course_type',studentCtrl.getByCourseType)
-studentRouter.get('/filterCourse/:id/:Course_type/:Course_id',studentCtrl.getByCourseID)
+studentRouter.get('/filterCourse/:id/:Course_type/:Course_id/:batch_year',studentCtrl.getByCourseID)
 studentRouter.get('/filterStatus/:id',studentCtrl.getByStudentStatus)
 studentRouter.put('/update/:id',studentCtrl.modifyStudent)
 studentRouter.post('/add',studentCtrl.addStudent),

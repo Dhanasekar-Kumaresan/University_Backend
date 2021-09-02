@@ -246,19 +246,18 @@ PUT http://localhost:3000/Regulation/deleteregulation/IN0010/R2
 
 
 ###
-POST http://localhost:3000/Regulation/newregulation/01
+POST http://localhost:3000/Regulation/newregulation/02
 Content-Type: application/json
 
 {
   "Regulation": [
     {
       "Active": true,
-      "Regulation_ID": "I1",
-      "Regulation_Name": "I1",
-      "Academic_Year": [
-        2019,
-        2023
-      ],
+      "Regulation_ID": "I2",
+      "Regulation_Name": "I2",
+    "Academic_Start_Year":2019,
+    "Academic_End_Year":2019,
+    "Course_Type":"B.Tech",
       "Grading": {
         "GradeType": "Points_Grade_Percentage_Description",
         "RangeLow": 9,

@@ -164,7 +164,7 @@ async function getByCourseType(req, res) {
 
 async function getByCourseID(req, res) {
   try {
-    let student = await Student.find({ institution_id: req.params.id, year:new Date().getFullYear() ,Course_type :req.params.Course_type , Course_id:req.params.Course_id })
+    let student = await Student.find({ institution_id: req.params.id, year:req.params.batch_year ,Course_type :req.params.Course_type , Course_id:req.params.Course_id })
     if (!student) {
       return res
         .status(200)

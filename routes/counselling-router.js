@@ -9,7 +9,7 @@ councellingRouter.get('/view',counsellingCtrl.getStudent)
 councellingRouter.post('/add/:id/:course_type',counsellingCtrl.addStudent)
 councellingRouter.post('/rank/:id/:course_type',counsellingCtrl.rankCalculation)
 
-councellingRouter.get('/mapping/:instu_id/:year/:course_id/:course_type',counsellingCtrl.studentSubjectmapping)
+councellingRouter.put('/mapping/:instu_id/:year/:course_id/:course_type',counsellingCtrl.studentSubjectmapping)
 
 
 module.exports=councellingRouter;
