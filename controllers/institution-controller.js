@@ -284,7 +284,8 @@ async function getDepartmentList(req, res) {
     let name = req.body.cor_id;
     institution[0].courseDetails.forEach((input)=>{
       if(input.Course_type == name){
-      deptList.push(input.Course_name);}
+      deptList.push(input.Course_name);
+    }
     });
     return res.status(200).json(deptList);}
   } catch(error){
@@ -294,6 +295,39 @@ async function getDepartmentList(req, res) {
     });
   }
 }
+
+
+
+
+//GET for fetching Departments with ID for an Institution
+async function getDepartmentListWithID(req, res) {
+  try {
+    let institution = await Institution.find({Institution_id:req.body.ins_id});
+    if (!institution.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let deptList = [];
+    let DepartmentList=[];
+    let name = req.body.cor_id;
+    institution[0].courseDetails.forEach((input)=>{
+      if(input.Course_type == name){
+      deptList.push(input.Course_name);
+        DepartmentList.push({name:input.Course_name,ID:input.Course_id});
+        //console.log(DepartmentList);
+    }
+    });
+    return res.status(200).json(DepartmentList);}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
 
 //GET for fetching Subjects
 async function getSubjectList(req, res) {
@@ -444,6 +478,7 @@ module.exports = {
   getCourseList,
   getCourseListWithYear,
   getDepartmentList,
+  getDepartmentListWithID,
   getSubjectList,
   getSemesterList,
   getAllInstitutions

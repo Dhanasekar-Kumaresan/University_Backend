@@ -14,6 +14,8 @@ institutionRouter.get('/all',institutionCtrl.getAllInstitutions)
 institutionRouter.post('/courses/',institutionCtrl.getCourseList)
 institutionRouter.get('/courseswithyears/:instu_id',institutionCtrl.getCourseListWithYear)
 institutionRouter.post('/branchList/',institutionCtrl.getDepartmentList)
+
+institutionRouter.post('/branchListWithID/',institutionCtrl.getDepartmentListWithID)
 institutionRouter.post('/subjects/',institutionCtrl.getSubjectList)
 institutionRouter.post('/semesters/',institutionCtrl.getSemesterList)
 
