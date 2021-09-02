@@ -324,3 +324,53 @@ exports.getRegDeptCurs = async function getRegDeptCurs(req, res) {
     });
   }
 }
+
+
+
+//regulation Academic end year updation.
+exports.UpdateAcademicEndYear=(req,res)=>
+{
+// console.log("fun");
+Institution_id=req.params.instu_id;
+course_type=req.params.course_type;
+regulation_id=req.params.regu_id;
+console.log(Institution_id,course_type,regulation_id);
+Regulation.updateOne(
+                  {
+                      
+                        Institution_id:Institution_id,
+                        Regulation:
+                        {
+                          $elemMatch:
+                                    {
+                                      Regulation_ID:regulation_id,
+                                      Course_Type:course_type
+                                    }
+                        }
+                      
+                  },
+                  {
+                    $set:
+                          {
+                            "Regulation.$[i].Academic_End_Year":req.body.Academic_End_Year
+                          }
+                  },
+                  {
+                    "arrayFilters":
+                                    [
+                                        {
+                                            "i.Regulation_ID":regulation_id,
+                                            "i.Course_Type":course_type
+                                        }                          
+                                        
+                                    ]
+                }
+                  ).then((data)=>
+                  {
+                    return res.status(200).json({msg:"sucess",data:data})
+                  }).catch((error)=>
+                  {
+                    return res.status(404).json({msg:"error",data:data})
+                  })
+                
+}
