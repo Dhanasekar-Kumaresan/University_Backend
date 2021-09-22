@@ -6,6 +6,13 @@ const validator = require('validator');
 
 const SubjectSkeletons = new mongoose.Schema(
     {
+        patternId:{
+            type: String,
+            required:true,
+            unique: true,
+            trim: true
+
+        },
         subject_type :
         {
             type:String,
@@ -50,7 +57,12 @@ const SubjectSkeletons = new mongoose.Schema(
     
             }
         }
-        ]  
+        ],
+        default : 
+        {
+            type:String,
+            required:false    
+        }
     }
 );
 

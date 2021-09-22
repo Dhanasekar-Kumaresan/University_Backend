@@ -426,7 +426,7 @@ Regulation.updateOne(
 
 exports.saveSkeletonToSubject=(req,res)=>
 {
- var Payload=req.body;
+ var Payload=req.body.patternId;
  var institution=req.params.instu_id;
  var regulation=req.params.regu_id;
  var departement=req.params.dep_id;
@@ -478,7 +478,7 @@ Regulation.updateOne(
   {
     $set:
           {
-            "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.evalCriteria" : Payload
+            "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.patternId" : Payload
           }
   },
   {
@@ -574,40 +574,12 @@ exports.getsubjectbyid=(req,res)=>
 
 
 //POST to fetch the evalCriteria For a subject
-exports.getSubjectEvalCriteria = async function getSubjectEvalCriteria(req, res) {
+exports.getSubjectSkeleton = async function getSubjectEvalCriteria(req, res) {
   try {
-    let evalData =await Regulation.aggregate(
-      [
-     {
-       $unwind:"$Regulation"
-     }
-     ,
-     {
-       $unwind:"$Regulation.Department_Details"
-     }
-     ,
-     {
-       $unwind:"$Regulation.Department_Details.Curriculum_Details"
-     },
-     {
-       $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data"
-     },
-     {
-      $unwind:"$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
-    },
-     {$match:{"Institution_id": req.body.ins_id,
-       "Regulation.Regulation_ID":req.body.reg_id,
-       "Regulation.Department_Details.Department_ID":req.body.dep_id,
-       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no,
-       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.body.sem_no),
-       "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code":req.body.sub_code
-     }}
-     
-     
-     ])
+    let subPattern = await SubjectSkeletons.find({patternId: req.body.patternId});
    //console.log(evalData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria);
    
-   return res.status(200).json({msg:"sucess",data:evalData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria})
+   return res.status(200).json({msg:"sucess",subPattern})
     
   } catch(error){
     return res.status(400).json({

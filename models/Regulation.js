@@ -30,16 +30,12 @@ const Curriculum_Subject=new mongoose.Schema({
       type:String,
       trim:true
   },
-  evalCriteria : { 
-    type:Object
-
-  },
   flag : {
     type:Boolean,
     default:false
 
   },
-  subjectPattern : {
+  patternId : {
     type:String
  
   }

@@ -266,6 +266,35 @@ async function getStudentMarks(req, res) {
 
       }
     } 
+    if(students.marks[0].length > 0){
+      for (var j = 0; j < students.length; j++) {
+
+        let semWise = students[j].marks;
+        let semMarks,subMarks;
+
+        for(let sem in semWise){
+          if(semWise[sem].semester == req.body.sem_no)
+            semMarks = semWise[sem].subjectWise;
+        }
+        for(let sub in semMarks){
+          if(semMarks[sub].sub_name == req.body.sub_code){
+            subMarks = semMarks[sub].sub_marks;
+          }
+        }
+        var obj = {
+          studentName: students[j].name,
+          studentID: students[j].student_id,
+        }
+        for (var k = 0; k < evalCriteria.subject_contributors.length; k++) {
+        //  let pat = evalCriteria.subject_contributors[k].type_of_evaluation;
+          obj[evalCriteria.subject_contributors[k].type_of_evaluation] = subMarks.evalCriteria.subject_contributors[k].type_of_evaluation;
+        }
+        excelArray.push(obj);
+      }
+
+
+
+    }
 
 
     if (!students) {

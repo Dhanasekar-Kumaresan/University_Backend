@@ -8,7 +8,7 @@ var {GetSubject,NewSubject,UpdateSubject,GetSubjectByID,Delete_Subject,MultipleS
     editsubject,
     saveSkeletonToSubject,
     getsubjectbyid,
-    getSubjectEvalCriteria
+    getSubjectSkeleton
 }=require("../controllers/SubjectController")
 
 
@@ -27,7 +27,7 @@ router.put("/editsubject/:instu_id/:regu_id/:dep_id/:subject_id",editsubject);
 router.patch("/saveSkeletonToSubject/:instu_id/:regu_id/:dep_id/:cirr_id/:sem_id/:subject_id",saveSkeletonToSubject);
 router.get("/getsubjectbyid/:instu_id/:regu_id/:dep_id/:subject_id",getsubjectbyid);
 
-router.post("/getSubjectSkeleton/",getSubjectEvalCriteria);
+router.post("/getSubjectSkeleton/",getSubjectSkeleton);
 
 
 

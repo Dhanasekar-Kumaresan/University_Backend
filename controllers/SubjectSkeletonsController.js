@@ -1,6 +1,6 @@
 const SubjectSkeletons = require('../models/SubjectSkeletons')
 const Regulation = require("../models/Regulation");
-const {validationResult}=require("express-validator");
+const {validationResult, body}=require("express-validator");
 
 async function createSubjectSkeletons(req,res){
     var Errors=validationResult(req);
@@ -8,19 +8,26 @@ async function createSubjectSkeletons(req,res){
         console.log("bad request");
         return res.status(400).json({ errors: Errors.errors });
       }
+
+      var skeleton = await SubjectSkeletons.find({patternId: req.body.patternId});
+      if(!skeleton.length){
+        console.log("inside");
       const  subjectSkeletons = new SubjectSkeletons(req.body);
       try {
         await subjectSkeletons.save();
       return res.status(201).json({ msg: "Success" ,data:subjectSkeletons});;
-    } catch (e) {
+    }catch (e) {
         return res.status(400).json({ msg: e });
+    }}
+    if(skeleton.length){
+      return res.status(301).json({msg: "patternId already exists. Try new one boy."})
     }
 }
 
 async function getSubjectSkeletonByDefaults(req,res){
 
     try{
-     const skeletons = await SubjectSkeletons.find({});
+     const skeletons = await SubjectSkeletons.find({default: true});
      return res.status(200).json({ msg: "Success", data: skeletons })
     }catch(e){
         return res.status(400).json({ msg: e });
@@ -42,7 +49,7 @@ async function getSubjectSkeletonByType(req,res){
 
 }
 
-async function addSubjectSkeletonToInstitution(req,res){
+async function addSubjectSkeletonToSubject(req,res){
     var institution=req.params.ins_id;
     var regulation=req.params.reg_id;
     try{
@@ -118,14 +125,14 @@ async function updateSubjectSkeletons(req, res) {
 
   }
 }
-
+ 
 
 
 
 module.exports={
     createSubjectSkeletons,
     getSubjectSkeletonByDefaults,
-    addSubjectSkeletonToInstitution,
+    addSubjectSkeletonToSubject,
     getSubjectSkeletonSubjectID,
     updateSubjectSkeletons,
     getSubjectSkeletonByType
