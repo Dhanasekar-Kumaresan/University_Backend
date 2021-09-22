@@ -234,6 +234,34 @@ exports.getRegulationsForInstitution = async function getRegulationsForInstituti
 }
 
 
+
+//GET Academic start and end year for a particular regualtion in an institution in array format
+exports.getAcademicStartEnd = async function getAcademicStartEnd(req, res) {
+  try {
+    let regData = await Regulation.find({Institution_id:req.body.ins_id});
+    if (!regData.length) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Institution not found` });
+    }
+    else{
+    let data = {academicStart: '',academicEnd: ''};
+    regData[0].Regulation.forEach((input)=>{
+      if(input.Regulation_ID == req.body.reg_id){
+        data.academicStart = input.Academic_Start_Year;
+        data.academicEnd = input.Academic_End_Year;
+      }
+      
+    });
+    return res.status(200).json(data);}
+  } catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
 //GET Departments for a particular regulation in an institution in array format
 exports.getRegDepts = async function getRegDepts(req, res) {
   try {

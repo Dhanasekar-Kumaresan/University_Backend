@@ -4,6 +4,7 @@ const { contentSecurityPolicy } = require("helmet");
 const Regulation = require("../models/Regulation");
 const SubjectCtrller = require("./SubjectController");
 const Subject = require("../models/Subject");
+const SubjectSkeletons = require('../models/SubjectSkeletons');
 
 
 
@@ -198,58 +199,27 @@ async function getStudentMarks(req, res) {
     let students = await Student.find({
       $and: [
         {
-          course_id: req.body.dep_id
+          Course_id: req.body.dep_id
         },
         {
-          college_id: req.body.ins_id
+          institution_id: req.body.ins_id
         },
         {
-          semester_no: req.body.sem_no
+          Curriculum_Id: req.body.cur_id
         },
         {
-          academicYear: req.body.acad
+          year: req.body.acad
+        },
+        {
+          Regulation_Id: req.body.reg_id
         }
       ]
     });
 
-    console.log(students);
-    let eval = await Regulation.aggregate(
-      [
-        {
-          $unwind: "$Regulation"
-        }
-        ,
-        {
-          $unwind: "$Regulation.Department_Details"
-        }
-        ,
-        {
-          $unwind: "$Regulation.Department_Details.Curriculum_Details"
-        },
-        {
-          $unwind: "$Regulation.Department_Details.Curriculum_Details.Semester_Data"
-        },
-        {
-          $unwind: "$Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects"
-        },
-        {
-          $match: {
-            "Institution_id": req.body.ins_id,
-            "Regulation.Regulation_ID": req.body.reg_id,
-            "Regulation.Department_Details.Department_ID": req.body.dep_id,
-            "Regulation.Department_Details.Curriculum_Details.Curriclum_Code": req.body.cur_no,
-            "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO": parseInt(req.body.sem_no),
-            "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code": req.body.sub_code
-          }
-        }
-
-
-      ]);
-
-
-    let evalCriteria = eval[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.evalCriteria;
-
-    //console.log(evalCriteria);
+    //console.log(students);
+    let eval = await SubjectSkeletons.find({patternId: req.body.patternId});
+    let evalCriteria = eval[0];
+    
     if (students[1].marks.length == 0) {
       for (var j = 0; j < students.length; j++) {
         var obj = {
@@ -266,7 +236,7 @@ async function getStudentMarks(req, res) {
 
       }
     } 
-    if(students.marks[0].length > 0){
+    if(students[0].marks.length > 0){
       for (var j = 0; j < students.length; j++) {
 
         let semWise = students[j].marks;
@@ -286,16 +256,11 @@ async function getStudentMarks(req, res) {
           studentID: students[j].student_id,
         }
         for (var k = 0; k < evalCriteria.subject_contributors.length; k++) {
-        //  let pat = evalCriteria.subject_contributors[k].type_of_evaluation;
-          obj[evalCriteria.subject_contributors[k].type_of_evaluation] = subMarks.evalCriteria.subject_contributors[k].type_of_evaluation;
+          obj[evalCriteria.subject_contributors[k].type_of_evaluation] = subMarks[evalCriteria.subject_contributors[k].type_of_evaluation];
         }
         excelArray.push(obj);
       }
-
-
-
     }
-
 
     if (!students) {
       return res
@@ -305,7 +270,7 @@ async function getStudentMarks(req, res) {
 
     let workbook = new excel.Workbook();
     let worksheet = workbook.addWorksheet("excelArray");
-
+    
     let columnArray = [
       { header: "ID", key: "studentID", width: 10 },
       { header: "NAME", key: "studentName", width: 25 }]

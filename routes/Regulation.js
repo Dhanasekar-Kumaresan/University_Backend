@@ -7,7 +7,7 @@ var {New_Regulation,GetRegulation,
     GetRegulationById,newregulation,
     getregulation,getregulationbyid,
     getdepartmentdetailsbyid,deleteregulation,
-    getRegulationsForInstitution, getRegDepts, getRegDeptCurs,UpdateAcademicEndYear} = require("../controllers/RegulationController");
+    getRegulationsForInstitution, getRegDepts, getRegDeptCurs,UpdateAcademicEndYear,getAcademicStartEnd} = require("../controllers/RegulationController");
 
 
 
@@ -22,6 +22,8 @@ router.post("/updateacademicendyear/:instu_id/:course_type/:regu_id",UpdateAcade
 router.post("/all/",getRegulationsForInstitution);
 router.post("/departments/",getRegDepts);
 router.post("/departments/curriculums",getRegDeptCurs);
+router.post("/getAcademic/",getAcademicStartEnd);
+
 
 
 
