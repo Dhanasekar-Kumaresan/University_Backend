@@ -250,8 +250,8 @@ async function getStudentMarksForExcel(req, res) {
         }
         if (semCheck) {
           for (let sub in semMarks) {
-            if (semMarks[sub].sub_name == req.body.sub_code) {
-              subMarks = semMarks[sub].sub_marks;
+            if (semMarks[sub].Subject_ID == req.body.sub_code) {
+              subMarks = semMarks[sub].Subject_Marks;
               subCheck = true;
             }
           }
@@ -339,24 +339,23 @@ async function updateStudentMarks(req, res) {
           "Regulation.Department_Details.Department_ID": req.params.dep_id,
           "Regulation.Department_Details.Curriculum_Details.Curriclum_Code": req.params.cur_id,
           "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO": parseInt(req.params.sem_id),
-          "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_Code": req.params.sub_id
+          "Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects.Subject_ID": req.params.sub_id
         }
       }
-
-
-    ])
+    ]);
+    //console.log(data);
   const subject = data[0].Regulation.Department_Details.Curriculum_Details.Semester_Data.Subjects;
-  const evalCriteria = subject.evalCriteria;
-  const subjectPayload = (({ Subject_Code, Subject_Name, Type }) => ({ Subject_Code, Subject_Name, Type }))(subject);
+  let evall = await SubjectSkeletons.find({patternId: subject.patternId});
+  let evalCriteria = evall[0];
+  const subjectPayload = (({ Subject_ID, Subject_Name, Type }) => ({ Subject_ID, Subject_Name, Type }))(subject);
   subjectPayload.Subject_Grade = "";
   subjectPayload.Subject_Percent = "";
   subjectPayload.Subject_Pointer = "",
-    subjectPayload.Subject_Marks = [];
+  subjectPayload.Subject_Marks = [];
   try {
-
     for (const record of studentMarksData) {
-      // const student = await Student.findOne({ college_id: req.params.ins_id, course_id: req.params.dep_id, student_id: record.id });
       const student = await Student.findOne({ student_id: record.id });
+      //console.log(student);
       if (student) {
         var sem_f = false, sub_f = false, sub_marks_f = false;
         if (student.marks.length != 0) {
@@ -364,15 +363,17 @@ async function updateStudentMarks(req, res) {
           if (sem_data[0]) {
             sem_f = true;
             if (sem_data[0].subjectWise.length != 0) {
-              var sub_data = sem_data[0].subjectWise.filter(obj => { return obj.Subject_Code == req.params.sub_id })
+              var sub_data = sem_data[0].subjectWise.filter(obj => { return obj.Subject_ID == req.params.sub_id })
               if (sub_data[0]) {
                 sub_f = true;
               }
             }
           }
         }
+        //console.log(sem_f,sub_f);  
         const { id, name, ...payload } = record;
         if (sem_f == false) {
+          
           var studentSemDataupdate = await Student.findOneAndUpdate({ student_id: record.id },
             {
               $push: {
@@ -387,6 +388,7 @@ async function updateStudentMarks(req, res) {
           sem_f = true;
         }
         if (sem_f == true && sub_f == false) {
+          
           var studentSubject = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id } } },
             {
               $push: {
@@ -405,7 +407,7 @@ async function updateStudentMarks(req, res) {
             })
           sub_f = true;
         }
-        var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code: req.params.sub_id } } } } },
+        var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_ID: req.params.sub_id } } } } },
           {
             $set: {
               'marks.$[i].subjectWise.$[j].Subject_Marks': payload
@@ -417,17 +419,21 @@ async function updateStudentMarks(req, res) {
               'i.semester': req.params.sem_id
             },
             {
-              'j.Subject_Code': req.params.sub_id
+              'j.Subject_ID': req.params.sub_id
             }
           ],
           upsert: true
 
         })
+        //working till here -- cheers!
+
+      //console.log(evalCriteria.subject_contributors.length);
         if (typeof evalCriteria != 'undefined') {
           if (Object.keys(payload).length != evalCriteria.subject_contributors.length) {
             return res.status(400).json({ success: false, message: "specify exact number of subject coordinators" })
           }
           let marks_for_subjectGrade = 0;
+          //Calculating the total marks got by the student for that subject -- good
           for (const key in payload) {
             if (payload.hasOwnProperty(key)) {
               const ec = evalCriteria.subject_contributors.filter(obj => { return obj.type_of_evaluation == `${key}` });
@@ -439,8 +445,12 @@ async function updateStudentMarks(req, res) {
 
             }
           }
+          //good
+
           if (marks_for_subjectGrade <= evalCriteria.total_marks_subject) {
             var percent = marks_for_subjectGrade * 100 / evalCriteria.total_marks_subject;
+            //console.log(percent);//
+
             var grade = await Regulation.aggregate([
               {
                 $unwind: "$Regulation"
@@ -452,23 +462,25 @@ async function updateStudentMarks(req, res) {
                 }
               }
             ])
+            //Calculating grade from the regulation i.e AA -- 10,..etc
             var gradingCriteria = grade[0].Regulation.Grading.GradingDetails;
-            console.log("grading crteria is ", gradingCriteria);
+            //console.log(gradingCriteria.length);
             for (let i = 0; i < gradingCriteria.length; i++) {
-              if ((gradingCriteria[i].percentage > percent) && ((i + 1) <= gradingCriteria.length) && (percent >= gradingCriteria[i + 1].percentage)) {
-                Subject_Grade = gradingCriteria[i + 1].grade;
-                Subject_Pointer = gradingCriteria[i + 1].point;
+              
+              if(gradingCriteria[gradingCriteria.length - 1].percentage > percent){
+                Subject_Grade = gradingCriteria[gradingCriteria.length - 1].grade;
+                Subject_Pointer = gradingCriteria[gradingCriteria.length - 1].points;
                 break;
-              } else if (percent >= gradingCriteria[i].percentage) {
-                Subject_Grade = gradingCriteria[i].grade;
-                Subject_Pointer = gradingCriteria[i].point;
-                break;
-              } else {
-                Subject_Grade = 'B';
-                Subject_Pointer = '6';
               }
-            }
-            var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_Code: req.params.sub_id } } } } },
+              if (gradingCriteria[i].percentage > percent) {
+                continue;
+              } 
+                Subject_Grade = gradingCriteria[i].grade;
+                Subject_Pointer = gradingCriteria[i].points;
+                break;
+              }
+            //console.log(Subject_Grade,Subject_Pointer)
+            var x = await Student.updateOne({ student_id: student.student_id, marks: { $elemMatch: { semester: req.params.sem_id, subjectWise: { $elemMatch: { Subject_ID: req.params.sub_id } } } } },
               {
                 $set: {
                   'marks.$[i].subjectWise.$[j].Subject_Grade': Subject_Grade,
@@ -483,7 +495,7 @@ async function updateStudentMarks(req, res) {
                   'i.semester': req.params.sem_id
                 },
                 {
-                  'j.Subject_Code': req.params.sub_id
+                  'j.Subject_ID': req.params.sub_id
                 }
               ],
               upsert: true
@@ -492,13 +504,13 @@ async function updateStudentMarks(req, res) {
             })
           } else {
             return res.status(400).json({ success: false, message: "total marks of subject exceed evaluation criteria" })
-
           }
         } else {
           return res.status(400).json({ success: false, message: "subject cordinators not specified for this subject" })
 
         }
-      } else {
+      }
+       else {
         return res.status(400).json({ success: false, message: "Student is not found" })
 
       }
@@ -509,7 +521,6 @@ async function updateStudentMarks(req, res) {
 
   } catch (e) {
     return res.status(400).json({ success: false, message: e.message })
-
   }
 }
 
@@ -638,8 +649,8 @@ async function getStudentMarksForSubject(req, res) {
       }
       if(semCheck){
         for(sub in obj){
-          if(obj[sub].sub_name == req.body.sub_code){
-            subData = obj[sub].sub_marks;
+          if(obj[sub].Subject_ID == req.body.sub_code){
+            subData = obj[sub].Subject_Marks;
           }
         }
       }
