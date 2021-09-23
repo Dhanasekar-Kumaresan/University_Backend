@@ -219,6 +219,7 @@ async function getStudentMarks(req, res) {
     //console.log(students);
     let eval = await SubjectSkeletons.find({patternId: req.body.patternId});
     let evalCriteria = eval[0];
+    let semCheck, subCheck = false;
     
     if (students[1].marks.length == 0) {
       for (var j = 0; j < students.length; j++) {
@@ -245,10 +246,14 @@ async function getStudentMarks(req, res) {
         for(let sem in semWise){
           if(semWise[sem].semester == req.body.sem_no)
             semMarks = semWise[sem].subjectWise;
+            semCheck = true;
         }
-        for(let sub in semMarks){
-          if(semMarks[sub].sub_name == req.body.sub_code){
-            subMarks = semMarks[sub].sub_marks;
+        if(semCheck){
+          for(let sub in semMarks){
+            if(semMarks[sub].sub_name == req.body.sub_code){
+              subMarks = semMarks[sub].sub_marks;
+              subCheck = true;
+            }
           }
         }
         var obj = {
@@ -256,7 +261,12 @@ async function getStudentMarks(req, res) {
           studentID: students[j].student_id,
         }
         for (var k = 0; k < evalCriteria.subject_contributors.length; k++) {
-          obj[evalCriteria.subject_contributors[k].type_of_evaluation] = subMarks[evalCriteria.subject_contributors[k].type_of_evaluation];
+          if(subCheck){
+            obj[evalCriteria.subject_contributors[k].type_of_evaluation] = subMarks[evalCriteria.subject_contributors[k].type_of_evaluation];
+          }
+          if(!subCheck){
+          obj[evalCriteria.subject_contributors[k].type_of_evaluation] = "";
+          }
         }
         excelArray.push(obj);
       }
