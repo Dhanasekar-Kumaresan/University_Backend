@@ -1,21 +1,67 @@
 const mongoose=require("mongoose")
 
-const SubjectFaculty = new mongoose.Schema({
-    facultyID:
+
+const eventDetails=new mongoose.Schema({
+
+    eventID:
     {
         type:String,
-        required:true
+        trim:true,
+        required:true,
+        unique:true
+    },
+    facultyID:
+    {
+        type:String
     },
     facultyName:
     {
-        type:String,
-        required:true
+        type:String
     },
-    departmentID:
+    subject_code:
     {
-        type:String,
+        type:String
+    },
+    subject_name:
+    {
+        type:String
+    },
+    start:
+    {
+        type:Date,
         required:true
     },
+    end:
+    {
+        type:Date,
+        required:true
+    },
+    venue:
+    {
+        type:String
+    }
+    });
+
+    const events=new mongoose.Schema({
+
+        title:
+        {
+            type:String,
+            required:true
+        },
+        start:
+        {
+            type:Date,
+            required:true
+        },
+        end:
+        {
+            type:Date,
+            required:true
+        }
+        });
+
+const SubjectFaculty = new mongoose.Schema({
     courseID:
     {
         type:String,
@@ -26,35 +72,16 @@ const SubjectFaculty = new mongoose.Schema({
         type:String,
         required:true
     },
-    semesterID:{
-        type:String,
-        required:true
-    },
-    marksSubmissionStatus:{
-        type:String,
-        required:true
-    },  
-    subjectID:{
-        type:String,
-        required:true
-    },
-    subjectType:{
+    semester:{
         type:String,
         required:true
     },
     academicYear:{
         type:String,
         required:true
-    },
-    regulationID:{
-        type:String,
-        required:true
-    },
-    downloadFlag:{
-        type:String,
-        default: 'true'
     },  
-    enrolledStudents: []
+    eventDetails: [eventDetails],
+    events: [events]
 
 
 });

@@ -3,9 +3,9 @@ const router=express.Router()
 const {check}=require("express-validator")
 
 
-var {addFaculty, getFacultyDetails} = require("../controllers/SubjectFacultyController")
+var {addFaculty, getCalendarEventDetails} = require("../controllers/SubjectFacultyController")
 
-router.post("/addFaculty/",addFaculty);
-router.post("/getsubject/",getFacultyDetails);
+router.post("/addEvent/",addFaculty);
+router.post("/getCalendarEvent/",getCalendarEventDetails);
 
 module.exports=router;
