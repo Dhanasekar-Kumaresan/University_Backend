@@ -135,7 +135,7 @@ async function modifyStudent(req, res) {
 
 async function getByInstitute(req, res) {
   try {
-    let student = await Student.find({ institution_id: req.params.id, year:new Date().getFullYear() })
+    let student = await Student.find({ institution_id: req.params.id, year: new Date().getFullYear() })
     if (!student) {
       return res
         .status(200)
@@ -150,7 +150,7 @@ async function getByInstitute(req, res) {
 
 async function getByCourseType(req, res) {
   try {
-    let student = await Student.find({ institution_id: req.params.id, year:new Date().getFullYear() ,Course_type :req.params. Course_type })
+    let student = await Student.find({ institution_id: req.params.id, year: new Date().getFullYear(), Course_type: req.params.Course_type })
     if (!student) {
       return res
         .status(200)
@@ -165,7 +165,7 @@ async function getByCourseType(req, res) {
 
 async function getByCourseID(req, res) {
   try {
-    let student = await Student.find({ institution_id: req.params.id, year:req.params.batch_year ,Course_type :req.params.Course_type , Course_id:req.params.Course_id })
+    let student = await Student.find({ institution_id: req.params.id, year: req.params.batch_year, Course_type: req.params.Course_type, Course_id: req.params.Course_id })
     if (!student) {
       return res
         .status(200)
@@ -193,7 +193,7 @@ async function getByStudentStatus(req, res) {
   }
 }
 
-async function getStudentMarks(req, res) {
+async function getStudentMarksForExcel(req, res) {
   try {
     let excelArray = [];
     let students = await Student.find({
@@ -217,10 +217,10 @@ async function getStudentMarks(req, res) {
     });
 
     //console.log(students);
-    let eval = await SubjectSkeletons.find({patternId: req.body.patternId});
+    let eval = await SubjectSkeletons.find({ patternId: req.body.patternId });
     let evalCriteria = eval[0];
     let semCheck, subCheck = false;
-    
+
     if (students[1].marks.length == 0) {
       for (var j = 0; j < students.length; j++) {
         var obj = {
@@ -236,21 +236,21 @@ async function getStudentMarks(req, res) {
         excelArray.push(obj);
 
       }
-    } 
-    if(students[0].marks.length > 0){
+    }
+    if (students[0].marks.length > 0) {
       for (var j = 0; j < students.length; j++) {
 
         let semWise = students[j].marks;
-        let semMarks,subMarks;
+        let semMarks, subMarks;
 
-        for(let sem in semWise){
-          if(semWise[sem].semester == req.body.sem_no)
+        for (let sem in semWise) {
+          if (semWise[sem].semester == req.body.sem_no)
             semMarks = semWise[sem].subjectWise;
-            semCheck = true;
+          semCheck = true;
         }
-        if(semCheck){
-          for(let sub in semMarks){
-            if(semMarks[sub].sub_name == req.body.sub_code){
+        if (semCheck) {
+          for (let sub in semMarks) {
+            if (semMarks[sub].sub_name == req.body.sub_code) {
               subMarks = semMarks[sub].sub_marks;
               subCheck = true;
             }
@@ -261,11 +261,11 @@ async function getStudentMarks(req, res) {
           studentID: students[j].student_id,
         }
         for (var k = 0; k < evalCriteria.subject_contributors.length; k++) {
-          if(subCheck){
+          if (subCheck) {
             obj[evalCriteria.subject_contributors[k].type_of_evaluation] = subMarks[evalCriteria.subject_contributors[k].type_of_evaluation];
           }
-          if(!subCheck){
-          obj[evalCriteria.subject_contributors[k].type_of_evaluation] = "";
+          if (!subCheck) {
+            obj[evalCriteria.subject_contributors[k].type_of_evaluation] = "";
           }
         }
         excelArray.push(obj);
@@ -280,7 +280,7 @@ async function getStudentMarks(req, res) {
 
     let workbook = new excel.Workbook();
     let worksheet = workbook.addWorksheet("excelArray");
-    
+
     let columnArray = [
       { header: "ID", key: "studentID", width: 10 },
       { header: "NAME", key: "studentName", width: 25 }]
@@ -545,6 +545,119 @@ async function updateStudentSgpa(req, res) {
   return res.status(200).json({ success: true, message: "updated sgpa succesfully" })
 }
 
+
+async function getStudentMarksForCourse(req, res) {
+  try {
+    let result = [];
+    let students = await Student.find({
+      $and: [
+        {
+          Course_id: req.body.dep_id
+        },
+        {
+          institution_id: req.body.ins_id
+        },
+        {
+          Curriculum_Id: req.body.cur_id
+        },
+        {
+          year: req.body.acad
+        },
+        {
+          Regulation_Id: req.body.reg_id
+        }
+      ]
+    });
+    if (!students) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Student entry not found` })
+    }
+    for (var stud in students) {
+      let obj = [];
+      let semsData = students[stud].marks;
+      for(sem in semsData){
+        if(semsData[sem].semester == req.body.sem_no){
+          obj = semsData[sem].subjectWise;
+        }
+      }
+      console.log(obj);
+      if(!obj.length){
+        result.push({student_id: students[stud].student_id, msg: "Data not found for this student"});
+      }else{
+        result.push({student_id: students[stud].student_id, data: obj})
+
+      }
+    }
+    return res.status(201).json(result);
+    
+  }
+  catch (error) {
+    return res.status(400).json({ success: false, message: error.message })
+  }
+}
+
+
+async function getStudentMarksForSubject(req, res) {
+  try {
+    let result = [];
+    let students = await Student.find({
+      $and: [
+        {
+          Course_id: req.body.dep_id
+        },
+        {
+          institution_id: req.body.ins_id
+        },
+        {
+          Curriculum_Id: req.body.cur_id
+        },
+        {
+          year: req.body.acad
+        },
+        {
+          Regulation_Id: req.body.reg_id
+        }
+      ]
+    });
+    if (!students) {
+      return res
+        .status(200)
+        .json({ success: false, message: `Student entry not found` })
+    }
+    for (var stud in students) {
+      let obj = [];
+      let subData;
+      let semCheck = false;
+      let semsData = students[stud].marks;
+      for(sem in semsData){
+        if(semsData[sem].semester == req.body.sem_no){
+          obj = semsData[sem].subjectWise;
+          semCheck = true;
+        }
+      }
+      if(semCheck){
+        for(sub in obj){
+          if(obj[sub].sub_name == req.body.sub_code){
+            subData = obj[sub].sub_marks;
+          }
+        }
+      }
+      console.log(subData);
+      if(subData == undefined){
+        result.push({student_id: students[stud].student_id, msg: "Data not found for this student"});
+      }else{
+        result.push({student_id: students[stud].student_id, data: subData})
+
+      }
+    }
+    return res.status(201).json(result);
+    
+  }
+  catch (error) {
+    return res.status(400).json({ success: false, message: error.message })
+  }
+}
 module.exports = {
   getStudent,
   addStudent,
@@ -553,8 +666,10 @@ module.exports = {
   getByInstitute,
   getByCourseType,
   getByStudentStatus,
-  getStudentMarks,
+  getStudentMarksForExcel,
   updateStudentMarks,
   updateStudentSgpa,
-  getByCourseID
+  getByCourseID,
+  getStudentMarksForCourse,
+  getStudentMarksForSubject
 }
