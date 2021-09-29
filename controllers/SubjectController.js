@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const Subject = require("../models/Subject");
 const Semester = require("../models/Semester");
 const Regulation = require("../models/Regulation");
+const SubjectSkeletons = require("../models/SubjectSkeletons");
 
 //get the all subject
 exports.GetSubject = (req, res) => {
