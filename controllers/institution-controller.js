@@ -332,7 +332,8 @@ async function getDepartmentListWithID(req, res) {
 //GET for fetching Subjects
 async function getSubjectList(req, res) {
   try {
-    let subjectData =await Regulation.aggregate(
+    
+    let subjectData = await Regulation.aggregate(
       [
      {
        $unwind:"$Regulation"
@@ -354,10 +355,9 @@ async function getSubjectList(req, res) {
        "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no,
        "Regulation.Department_Details.Curriculum_Details.Semester_Data.Semester_NO":parseInt(req.body.sem_no)
      }}
-     
-     
      ])
-   //console.log(subjectData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data);
+
+   console.log(subjectData);
    
    return res.status(200).json({msg:"sucess",data:subjectData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data})
     
@@ -415,16 +415,17 @@ async function getSemesterList(req, res) {
      },
   
      {$match:{"Institution_id": req.body.ins_id,
-     "Regulation.Regulation_ID":req.body.reg_id,
-       "Regulation.Department_Details.Department_ID":req.body.dep_id,
-       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code":req.body.cur_no
+     "Regulation.Regulation_ID": req.body.reg_id,
+       "Regulation.Department_Details.Department_ID": req.body.dep_id,
+       "Regulation.Department_Details.Curriculum_Details.Curriclum_Code": req.body.cur_no
       }},
       {
-        $project:{"Regulation.Grading":0, "Regulation.evaluationCriteria":0}
+        $project:{"Regulation.Grading":0}
       }
 
   
      ]);
+    // console.log(semData)
      let sems = semData[0].Regulation.Department_Details.Curriculum_Details.Semester_Data;
      let semesters = [];
      for(var i = 0; i<sems.length; i++){

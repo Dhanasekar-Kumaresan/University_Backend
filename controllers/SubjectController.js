@@ -459,7 +459,7 @@ Regulation.updateOne(
                                                                      {
                                                                       $elemMatch : 
                                                                       {
-                                                                       Subject_Code : subject
+                                                                       Subject_ID : subject
                                                                       }
                                                                      }
                                                                }
@@ -478,7 +478,8 @@ Regulation.updateOne(
   {
     $set:
           {
-            "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.patternId" : Payload
+            "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.patternId" : Payload,
+            "Regulation.$[i].Department_Details.$[j].Curriculum_Details.$[k].Semester_Data.$[l].Subjects.$.flag" : true
           }
   },
   {
@@ -499,7 +500,7 @@ Regulation.updateOne(
          "l.Semester_NO" : sem
         },
         {
-          "Subjects.Subject_Code":subject
+          "Subjects.Subject_ID":subject
         }
     ],
     upsert: true
